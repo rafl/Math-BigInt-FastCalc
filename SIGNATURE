@@ -1,45 +1,44 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.41.
+signed via the Module::Signature module, version 0.42.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
 
     % cpansign -v
 
-It would check each file's integrity, as well as the signature's
+It will check each file's integrity, as well as the signature's
 validity.  If "==> Signature verified OK! <==" is not displayed,
 the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
 
 -----BEGIN PGP SIGNED MESSAGE-----
 
-SHA1 c9bbbb834c445ab84fa7eefcbe7df176d7b2a740 CHANGES
+SHA1 81d4ebfd897fe6e6150a8fb77bc8dc0cc04025a2 CHANGES
 SHA1 58d7a00ab2a9f5448a561d49b5a2077efa245ac7 CREDITS
 SHA1 2ebdc830d3ab736b281b442fde222a489061e04c FastCalc.xs
 SHA1 7f21ec920c8aa4fd4c1ac59c7127b37967b17a09 MANIFEST
-SHA1 2842da2976b0ee9051f3807a812d6b1fb5b38662 META.yml
-SHA1 7f53e184fde40644cafec56f6f89b2a63b4f175d Makefile.PL
+SHA1 9e6e957b8fbff5b17748e5f3d75f03fd9b2f2308 META.yml
+SHA1 85923bcbbd52611ffabda4c739e45940eeed9aa0 Makefile.PL
 SHA1 5f73e0906d055d512180eb8b0b9c60f06edcb596 README
 SHA1 0219b495b96f8a946cd23c384b66c9231e29f0b6 TODO
-SHA1 31c098778db83443440c210bc2930a191545fab7 lib/Math/BigInt/FastCalc.pm
-SHA1 89f15bfcbcbdc0b481728774d430faf6a1984da8 t/bigfltpm.inc
-SHA1 ba089a2ce00f089afbb9769e801e8dfb9ded8180 t/bigfltpm.t
+SHA1 588b8bf94ee20a44349683f0ec445cd037ad6756 lib/Math/BigInt/FastCalc.pm
+SHA1 57a416650fede5f54aa295e5cd133022a0b9efdd t/bigfltpm.inc
+SHA1 4076f36c4d0989c5f3bfd208dd6e0c553ae35a3e t/bigfltpm.t
 SHA1 81f78404be3f660a61d68719de389d473888f640 t/bigintfc.t
-SHA1 f0ea2e8dcc8c8d724db2d8cf81a41a69b4675c3e t/bigintpm.inc
-SHA1 04db742ad369d3a372022b51cfebd06db05ab7cf t/bigintpm.t
+SHA1 631142ae4b92f7187bc526ccd7a83a8459582e65 t/bigintpm.inc
+SHA1 1648f8f9a0048b12b905ef59aa0bcb86c6cf6f17 t/bigintpm.t
 SHA1 f324311bde3f86401ea2708c42a6f13031a535a4 t/bootstrap.t
 SHA1 7f10510e0218cfae2fbb58dabeea0ba966ede013 t/mbi_rand.t
 SHA1 8b454e3015212b33974be31c54a0ca745c59b4ba t/mbimbf.inc
 SHA1 ccc08f6373dba8db715fc1f2c18f16daacc902b4 t/mbimbf.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
-Comment: When cryptography is outlawed, bayl bhgynjf jvyy unir cevinpl.
 
-iQEVAwUBQR/GyHcLPEOTuEwVAQFlygf9HiYShhILV+c8joohYc4aoJveQ8WVz3pV
-NHCdOYD3+ZDjMMtRp5KhrrtafFeCBFwBKoOBaDa4L9rOX3aWIB4T4j74Ny+3vtI2
-26ihGJLKJyLlic4l9M5ccIKDLL40yk77EdZYw+xyh1QDfKiyo6fI7Spwhxpozxdb
-3agyq0p1Fw+7pz1qRLIRYt9jfZxG/tFXRD7HPKWZtzmNqnhAMketQOWqHlKjxVmu
-+5E/ZxWcB+9URvBA2/gJMt43qF7DZmY4PQn5x0nfDlh+2dZzybpjSciaLWeMaPdM
-2fHYfiiruu74Qe/wpYRE4yFkiXkNvgsz6gnvBf92T4Yhz3DiBD2UGQ==
-=njBe
+iQEVAwUBQdbLmXcLPEOTuEwVAQHpEwf9EzVBJ+espsuULLvpZh3pR/AIjzol2ilo
+K32XJEH3Ycx2F5S2tXTXQ8qz8Ng+4wp3K9n/xqkQsPXGRKCfuEeR1uYbQLjlNtN6
+UtVeKWb0/Mn8bjprpBRJKSzWOxurRZKlrGVszoxWJ7nJov25GCEN/JdzOOGIiOLa
+8Y5UxW5GjBwnrkq88NiEi5SN7z60waVHQIiXRX5MDKK1UGqgwxo1of6zizgDe0dn
+mVWeB5z9UXge2DPDaf63ow3ONZVD51qXWkm9pXLSZFC2pPE9CKPJTTDJavieTfKq
+hRirf3TP4/qYbcXY5dwsfE1o+Oxy1eFuuPMBQpAyBCsFrBU6u2Cqsw==
+=G5yl
 -----END PGP SIGNATURE-----

@@ -4,14 +4,13 @@ use 5.005;
 use strict;
 # use warnings;	# dont use warnings for older Perls
 
-require Exporter;
 require DynaLoader;
 # BASE and BASE_LEN must be use vars, not "my ..." otherwise the XS code segfaults
 use vars qw/@ISA $VERSION $BASE_LEN $BASE/;
 
-@ISA = qw(Exporter DynaLoader);
+@ISA = qw(DynaLoader);
 
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 bootstrap Math::BigInt::FastCalc $VERSION;
 
@@ -516,8 +515,19 @@ sub _div_use_mul
     # now calculate $x / $yorg
     if (length(int($yorg->[-1])) == length(int($x->[-1])))
       {
-      # same length, so make full compare, and if equal, return 1
-      # hm, same lengths, but same contents? So we need to check all parts:
+
+      # We take a shortcut here, because the result must be
+      # between 1 and MAX_VAL (e.g. one element) and rem is not wanted.
+      if (!wantarray)
+        {
+        $x->[0] = int($x->[-1] / $yorg->[-1]);
+        splice(@$x,1);                  # keep single element
+        return $x;
+        }
+
+      # wantarray: return (x,rem)
+      # same length, so make full compare
+
       my $a = 0; my $j = scalar @$x - 1;
       # manual way (abort if unequal, good for early ne)
       while ($j >= 0)
@@ -525,25 +535,17 @@ sub _div_use_mul
         last if ($a = $x->[$j] - $yorg->[$j]); $j--;
         }
       # $a contains the result of the compare between X and Y
-      # a < 0: x < y, a == 0 => x == y, a > 0: x > y
+      # a < 0: x < y, a == 0: x == y, a > 0: x > y
       if ($a <= 0)
         {
-        if (wantarray)
-	  {
-          $rem = [ 0 ];			# a = 0 => x == y => rem 1
-          $rem = [@$x] if $a != 0;	# a < 0 => x < y => rem = x
-	  }
+        $rem = [ 0 ];			# a = 0 => x == y => rem 0
+        $rem = [@$x] if $a != 0;	# a < 0 => x < y => rem = x
         splice(@$x,1);			# keep single element
         $x->[0] = 0;			# if $a < 0
-        if ($a == 0)
-          {
-          # $x == $y
-          $x->[0] = 1;
-          }
-        return ($x,$rem) if wantarray;
-        return $x;
+        $x->[0] = 1 if $a == 0;		# $x == $y
+        return ($x,$rem);
         }
-      # $x >= $y, proceed normally
+      # $x >= $y, so proceed normally
       }
     }
 
@@ -710,8 +712,19 @@ sub _div_use_div
 
     if (length(int($yorg->[-1])) == length(int($x->[-1])))
       {
-      # same length, so make full compare, and if equal, return 1
-      # hm, same lengths, but same contents? So we need to check all parts:
+
+      # We take a shortcut here, because the result must be
+      # between 1 and MAX_VAL (e.g. one element) and rem is not wanted.
+      if (!wantarray)
+        {
+        $x->[0] = int($x->[-1] / $yorg->[-1]);
+        splice(@$x,1);			# keep single element
+        return $x;
+        }
+
+      # wantarray: return (x,rem)
+      # same length, so make full compare
+
       my $a = 0; my $j = scalar @$x - 1;
       # manual way (abort if unequal, good for early ne)
       while ($j >= 0)
@@ -719,23 +732,15 @@ sub _div_use_div
         last if ($a = $x->[$j] - $yorg->[$j]); $j--;
         }
       # $a contains the result of the compare between X and Y
-      # a < 0: x < y, a == 0 => x == y, a > 0: x > y
+      # a < 0: x < y, a == 0: x == y, a > 0: x > y
       if ($a <= 0)
         {
-        if (wantarray)
-	  {
-          $rem = [ 0 ];			# a = 0 => x == y => rem 1
-          $rem = [@$x] if $a != 0;	# a < 0 => x < y => rem = x
-	  }
+        $rem = [ 0 ];			# a = 0 => x == y => rem 0
+        $rem = [@$x] if $a != 0;	# a < 0 => x < y => rem = x
         splice(@$x,1);			# keep single element
         $x->[0] = 0;			# if $a < 0
-        if ($a == 0)
-          {
-          # $x == $y
-          $x->[0] = 1;
-          }
-        return ($x,$rem) if wantarray;
-        return $x;
+        $x->[0] = 1 if $a == 0;		# $x == $y
+        return ($x,$rem);
         }
       # $x >= $y, so proceed normally
       }
@@ -1643,7 +1648,7 @@ sub _from_hex
   # convert a hex number to decimal (ref to string, return ref to array)
   my ($c,$hs) = @_;
 
-  my $m = [ 0x10000000 ];			# 28 bit at a time (<32 bit!)
+  my $m = _new($c, 0x10000000);			# 28 bit at a time (<32 bit!)
   my $d = 7;					# 7 digits at a time
   if ($] <= 5.006)
     {
@@ -1663,8 +1668,15 @@ sub _from_hex
     $val =~ s/^[+-]?0x// if $len == 0;		# for last part only because
     $val = hex($val);				# hex does not like wrong chars
     $i -= $d; $len --;
-    _add ($c, $x, _mul ($c, [ $val ], $mul ) ) if $val != 0;
-    _mul ($c, $mul, $m ) if $len >= 0; 		# skip last mul
+    my $adder = [ $val ];
+    # if the resulting number was to big to fit into one element, create a
+    # two-element version (bug found by Mark Lakata - Thanx!)
+    if (CORE::length($val) > $BASE_LEN)
+      {
+      $adder = _new($c,$val);
+      }
+    _add ($c, $x, _mul ($c, $adder, $mul ) ) if $val != 0;
+    _mul ($c, $mul, $m ) if $len >= 0;		# skip last mul
     }
   $x;
   }
@@ -1761,7 +1773,7 @@ sub _gcd
   # greatest common divisor
   my ($c,$x,$y) = @_;
 
-  while (! _is_zero($c,$y))
+  while ( (scalar @$y != 1) || ($y->[0] != 0) )		# while ($y != 0)
     {
     my $t = _copy($c,$y);
     $y = _mod($c, $x, $y);
@@ -1778,13 +1790,13 @@ __END__
 
 =head1 NAME
 
-Math::BigInt::Calc - Pure Perl module to support Math::BigInt
+Math::BigInt::FastCalc - Math::BigInt::Calc with some XS for more speed
 
 =head1 SYNOPSIS
 
-Provides support for big integer calculations. Not intended to be used by other
-modules. Other modules which sport the same functions can also be used to support
-Math::BigInt, like Math::BigInt::GMP or Math::BigInt::Pari.
+Provides support for big integer calculations. Not intended to be used by
+other modules. Other modules which sport the same functions can also be used
+to support Math::BigInt, like L<Math::BigInt::GMP> or L<Math::BigInt::Pari>.
 
 =head1 DESCRIPTION
 
@@ -1798,6 +1810,9 @@ follows the same API as this can be used instead by using the following:
 version like 'Pari'.
 
 =head1 STORAGE
+
+FastCalc works exactly like Calc, in stores the numbers in decimal form,
+chopped into parts.
 
 =head1 METHODS
 

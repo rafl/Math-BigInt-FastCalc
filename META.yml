@@ -1,11 +1,10 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Math-BigInt-FastCalc
-version:      0.07
+--- #YAML:1.0
+name: Math-BigInt-FastCalc
+version: 0.08
 version_from: lib/Math/BigInt/FastCalc.pm
-installdirs:  site
-requires:
-    Math::BigInt:                  1.72
-
+license: perl
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+generated_by: Math-BigInt-FastCalc version 0.08
+installdirs: site
+requires:
+  Math::BigInt: 1.74
