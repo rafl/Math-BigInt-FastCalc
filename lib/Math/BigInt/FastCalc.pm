@@ -9,7 +9,7 @@ require DynaLoader;
 use vars qw/@ISA $VERSION $BASE_LEN/;
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 bootstrap Math::BigInt::FastCalc $VERSION;
 
@@ -28,6 +28,8 @@ bootstrap Math::BigInt::FastCalc $VERSION;
 # _zero
 # _one
 # _two
+# _acmp
+# _len
 
 # todo:
 # - fully remove funky $# stuff (maybe)

@@ -26,3 +26,7 @@ Revision history for Perl extension Math::BigInt::FastCalc.
     valid if the numbers have both the same length. If the length is
      different, then FastCalc is about factor 1.2 to 1.7 faster than Calc.
 
+2002-08-13 0.05 Tels
+  * note that _len() and _acmp() are in XS was missing
+  * cleaned of distribution of unwanted files
+

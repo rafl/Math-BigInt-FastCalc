@@ -13,10 +13,3 @@ t/mbimbf.t
 lib/Math/BigInt/FastCalc.pm
 FastCalc.xs
 Makefile.PL
-bench.pl
-timings.txt
-time.txt
-bcmp.pl
-bcmp.txt
-calc.pl
-bpow.pl
