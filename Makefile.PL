@@ -5,7 +5,7 @@ WriteMakefile(
     'NAME'		=> 'Math::BigInt::FastCalc',
     'VERSION_FROM'	=> 'lib/Math/BigInt/FastCalc.pm', # finds $VERSION
     'PREREQ_PM'		=> {
-	Math::BigInt => 1.61,
+	Math::BigInt => 1.62,
       }, # e.g., Module::Name => 1.1
 #    ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
 #	# retrieve abstract from module

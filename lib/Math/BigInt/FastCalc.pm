@@ -6,10 +6,11 @@ use strict;
 
 require Exporter;
 require DynaLoader;
-use vars qw/@ISA $VERSION $BASE_LEN/;
+# BASE BASE_LEN must be use vars, not my otherwise the XS code segfaults
+use vars qw/@ISA $VERSION $BASE_LEN $BASE/;
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 bootstrap Math::BigInt::FastCalc $VERSION;
 
@@ -19,20 +20,17 @@ bootstrap Math::BigInt::FastCalc $VERSION;
 # leading zero parts (except the first) and in base 1eX where X is determined
 # automatically at loading time to be the maximum possible value
 
-# The following functions are now implemented in XS:
+# The following functions are now implemented in FastCalc.xs:
 
-# _is_odd
-# _is_even
-# _is_one
-# _is_zero
-# _zero
-# _one
-# _two
-# _acmp
-# _len
+# _is_odd	_is_even	_is_one		_is_zero
+# _zero		_one		_two
+# _acmp		_len		_num
+# _inc		_dec
+# __strip_zeros	_copy
 
 # todo:
 # - fully remove funky $# stuff (maybe)
+# - find a way to use the Perl methods as fallback if XS is not available?
 
 # USE_MUL: due to problems on certain os (os390, posix-bc) "* 1e-5" is used
 # instead of "/ 1e5" at some places, (marked with USE_MUL). Other platforms
@@ -45,7 +43,7 @@ bootstrap Math::BigInt::FastCalc $VERSION;
  
 # constants for easier life
 my $nan = 'NaN';
-my ($MBASE,$BASE,$RBASE,$MAX_VAL,$BASE_LEN2,$BASE_LEN_SMALL);
+my ($MBASE,$RBASE,$MAX_VAL,$BASE_LEN2,$BASE_LEN_SMALL);
 my ($AND_BITS,$XOR_BITS,$OR_BITS);
 my ($AND_MASK,$XOR_MASK,$OR_MASK);
 my ($LEN_CONVERT);
@@ -292,10 +290,10 @@ BEGIN
 #  [ 2 ];
 #  }
 
-sub _copy
-  {
-  [ @{$_[1]} ];
-  }
+#sub _copy
+#  {
+#  [ @{$_[1]} ];
+#  }
 
 # catch and throw away
 sub import { }
@@ -328,19 +326,19 @@ sub _str
   \$ret;
   }                                                                             
 
-sub _num
-  {
-  # Make a number (scalar int/float) from a BigInt object
-  my $x = $_[1];
-  return $x->[0] if scalar @$x == 1;  # below $BASE
-  my $fac = 1;
-  my $num = 0;
-  foreach (@$x)
-    {
-    $num += $fac*$_; $fac *= $BASE;
-    }
-  $num; 
-  }
+#sub _num
+#  {
+#  # Make a number (scalar int/float) from a BigInt object
+#  my $x = $_[1];
+#  return $x->[0] if scalar @$x == 1;  # below $BASE
+#  my $fac = 1;
+#  my $num = 0;
+#  foreach (@$x)
+#    {
+#    $num += $fac*$_; $fac *= $BASE;
+#    }
+#  $num; 
+#  }
 
 ##############################################################################
 # actual math code
@@ -379,38 +377,38 @@ sub _add
   $x;
   }                                                                             
 
-sub _inc
-  {
-  # (ref to int_num_array, ref to int_num_array)
-  # routine to add 1 to a base 1eX numbers
-  # This routine clobbers up array x, but not y.
-  my ($c,$x) = @_;
+#sub _inc
+#  {
+#  # (ref to int_num_array, ref to int_num_array)
+#  # routine to add 1 to a base 1eX numbers
+#  # This routine clobbers up array x, but not y.
+#  my ($c,$x) = @_;
+#
+#  for my $i (@$x)
+#    {
+#    return $x if (($i += 1) < $BASE);		# early out
+#    $i = 0;					# overflow, next
+#    }
+#  push @$x,1 if ($x->[-1] == 0);		# last overflowed, so extend
+#  $x;
+#  }                                                                             
 
-  for my $i (@$x)
-    {
-    return $x if (($i += 1) < $BASE);		# early out
-    $i = 0;					# overflow, next
-    }
-  push @$x,1 if ($x->[-1] == 0);		# last overflowed, so extend
-  $x;
-  }                                                                             
-
-sub _dec
-  {
-  # (ref to int_num_array, ref to int_num_array)
-  # routine to add 1 to a base 1eX numbers
-  # This routine clobbers up array x, but not y.
-  my ($c,$x) = @_;
-
-  my $MAX = $BASE-1;				# since MAX_VAL based on MBASE
-  for my $i (@$x)
-    {
-    last if (($i -= 1) >= 0);			# early out
-    $i = $MAX;					# overflow, next
-    }
-  pop @$x if $x->[-1] == 0 && @$x > 1;		# last overflowed (but leave 0)
-  $x;
-  }                                                                             
+#sub _dec
+#  {
+#  # (ref to int_num_array, ref to int_num_array)
+#  # routine to add 1 to a base 1eX numbers
+#  # This routine clobbers up array x, but not y.
+#  my ($c,$x) = @_;
+#
+#  my $MAX = $BASE-1;				# since MAX_VAL based on MBASE
+#  for my $i (@$x)
+#    {
+#    last if (($i -= 1) >= 0);			# early out
+#    $i = $MAX;					# overflow, next
+#    }
+#  pop @$x if $x->[-1] == 0 && @$x > 1;		# last overflowed (but leave 0)
+#  $x;
+#  }                                                                             
 
 sub _sub
   {
@@ -445,43 +443,6 @@ sub _sub
   __strip_zeros($sy);
   }                                                                             
 
-sub _square_use_mul
-  {
-  # compute $x ** 2 or $x * $x in-place and return $x
-  my ($c,$x) = @_;
-
-  # From: Handbook of Applied Cryptography by A. Menezes, P. van Oorschot and
-  #       S. Vanstone., Chapter 14
-
-  #14.16 Algorithm Multiple-precision squaring
-  #INPUT: positive integer x = (xt 1 xt 2 ... x1 x0)b.
-  #OUTPUT: x * x = x ** 2 in radix b representation. 
-  #1. For i from 0 to (2t - 1) do: wi <- 0. 
-  #2.  For i from 0 to (t - 1) do the following: 
-  # 2.1 (uv)b w2i + xi * xi, w2i v, c u. 
-  # 2.2 For j from (i + 1)to (t - 1) do the following: 
-  #      (uv)b <- wi+j + 2*xj * xi + c, wi+j <- v, c <- u. 
-  # 2.3 wi+t <- u. 
-  #3. Return((w2t-1 w2t-2 ... w1 w0)b).
-
-#  # Note: That description is crap. Half of the symbols are not explained or
-#  # used with out beeing set.
-#  my $t = scalar @$x;		# count
-#  my ($c,$i,$j);
-#  for ($i = 0; $i < $t; $i++)
-#    {
-#    $x->[$i] = $x->[$i*2] + $x[$i]*$x[$i];
-#    $x->[$i*2] = $x[$i]; $c = $x[$i];
-#    for ($j = $i+1; $j < $t; $j++)
-#      {
-#      $x->[$i] = $x->[$i+$j] + 2 * $x->[$i] * $x->[$j];
-#      $x->[$i+$j] = $x[$j]; $c = $x[$i];
-#      }
-#    $x->[$i+$t] = $x[$i];
-#    }
-  $x;
-  }
-
 sub _mul_use_mul
   {
   # (ref to int_num_array, ref to int_num_array)
@@ -509,10 +470,6 @@ sub _mul_use_mul
 
   # since multiplying $x with $x fails, make copy in this case
   $yv = [@$xv] if $xv == $yv;	# same references?
-#  $yv = [@$xv] if "$xv" eq "$yv";	# same references?
-
-  # since multiplying $x with $x would fail here, use the faster squaring
-#  return _square($c,$xv) if $xv == $yv;	# same reference?
 
   if ($LEN_CONVERT != 0)
     {
@@ -591,9 +548,6 @@ sub _mul_use_div
  
   # since multiplying $x with $x fails, make copy in this case
   $yv = [@$xv] if $xv == $yv;	# same references?
-#  $yv = [@$xv] if "$xv" eq "$yv";	# same references?
-  # since multiplying $x with $x would fail here, use the faster squaring
-#  return _square($c,$xv) if $xv == $yv;	# same reference?
 
   if ($LEN_CONVERT != 0)
     {
@@ -1041,30 +995,30 @@ sub _zeros
 #  (scalar @$x == 1) && ($x->[0] == 1) <=> 0; 
 # }
 
-sub __strip_zeros
-  {
-  # internal normalization function that strips leading zeros from the array
-  # args: ref to array
-  my $s = shift;
- 
-  my $cnt = scalar @$s; # get count of parts
-  my $i = $cnt-1;
-  push @$s,0 if $i < 0;		# div might return empty results, so fix it
-
-  return $s if @$s == 1;		# early out
-
-  #print "strip: cnt $cnt i $i\n";
-  # '0', '3', '4', '0', '0',
-  #  0    1    2    3    4
-  # cnt = 5, i = 4
-  # i = 4
-  # i = 3
-  # => fcnt = cnt - i (5-2 => 3, cnt => 5-1 = 4, throw away from 4th pos)
-  # >= 1: skip first part (this can be zero)
-  while ($i > 0) { last if $s->[$i] != 0; $i--; }
-  $i++; splice @$s,$i if ($i < $cnt); # $i cant be 0
-  $s;                                                                    
-  }                                                                             
+#sub __strip_zeros
+#  {
+#  # internal normalization function that strips leading zeros from the array
+#  # args: ref to array
+#  my $s = shift;
+# 
+#  my $cnt = scalar @$s; # get count of parts
+#  my $i = $cnt-1;
+#  push @$s,0 if $i < 0;		# div might return empty results, so fix it
+#
+#  return $s if @$s == 1;		# early out
+#
+#  #print "strip: cnt $cnt i $i\n";
+#  # '0', '3', '4', '0', '0',
+#  #  0    1    2    3    4
+#  # cnt = 5, i = 4
+#  # i = 4
+#  # i = 3
+#  # => fcnt = cnt - i (5-2 => 3, cnt => 5-1 = 4, throw away from 4th pos)
+#  # >= 1: skip first part (this can be zero)
+#  while ($i > 0) { last if $s->[$i] != 0; $i--; }
+#  $i++; splice @$s,$i if ($i < $cnt); # $i cant be 0
+#  $s;                                                                    
+#  }                                                                             
 
 ###############################################################################
 # check routine to test internal state of corruptions
@@ -1181,6 +1135,14 @@ sub _rsft
   # multiples of $BASE_LEN
   my $dst = 0;				# destination
   my $src = _num($c,$y);		# as normal int
+  my $xlen = (@$x-1)*$BASE_LEN+length(int($x->[-1]));  # len of x in digits
+  if ($src > $xlen)
+    {
+    # 12345 67890 shifted right by more than 10 digits => 0
+    splice (@$x,1);                    # leave only one element
+    $x->[0] = 0;                       # set to zero
+    return $x;
+    }
   my $rem = $src % $BASE_LEN;		# remainder to shift
   $src = int($src / $BASE_LEN);		# source
   if ($rem == 0)
@@ -1270,7 +1232,7 @@ sub _fac
 
   if ((@$cx == 1) && ($cx->[0] <= 2))
     {
-    $cx->[0] = 1 * ($cx->[0]||1); # 0,1 => 1, 2 => 2
+    $cx->[0] ||= 1;				# 0,1 => 1, 2 => 2
     return $cx;
     }
 
@@ -1291,7 +1253,6 @@ sub _fac
   my $n = _copy($c,$cx);
   $cx = [$last];
 
-  #$cx = _one($c);
   while (!(@$n == 1 && $n->[0] == $step))
     {
     _mul($c,$cx,$n); _dec($c,$n);
@@ -1615,38 +1576,35 @@ sub _from_bin
 ##############################################################################
 # special modulus functions
 
-# not ready yet, since it would need to deal with unsigned numbers
-sub _modinv1
+sub _modinv
   {
-  # inverse modulus
-  my ($c,$num,$mod) = @_;
+  # modular inverse
+  my ($c,$x,$y) = @_;
 
   my $u = _zero($c); my $u1 = _one($c);
-  my $a = _copy($c,$mod); my $b = _copy($c,$num);
+  my $a = _copy($c,$y); my $b = _copy($c,$x);
 
   # Euclid's Algorithm for bgcd(), only that we calc bgcd() ($a) and the
-  # result ($u) at the same time
+  # result ($u) at the same time. See comments in BigInt for why this works.
+  my $q;
+  ($a, $q, $b) = ($b, _div($c,$a,$b));          # step 1
+  my $sign = 1;
   while (!_is_zero($c,$b))
     {
-#    print ${_str($c,$a)}, " ", ${_str($c,$b)}, " ", ${_str($c,$u)}, " ",
-#     ${_str($c,$u1)}, "\n";
-    ($a, my $q, $b) = ($b, _div($c,$a,$b));
-#    print ${_str($c,$a)}, " ", ${_str($c,$q)}, " ", ${_str($c,$b)}, "\n";
-    # original: ($u,$u1) = ($u1, $u - $u1 * $q);
-    my $t = _copy($c,$u);
-    $u = _copy($c,$u1);
-    _mul($c,$u1,$q);
-    $u1 = _sub($t,$u1);
-#    print ${_str($c,$a)}, " ", ${_str($c,$b)}, " ", ${_str($c,$u)}, " ",
-#     ${_str($c,$u1)}, "\n";
+    my $t = _add($c,                            # step 2:
+       _mul($c,_copy($c,$u1), $q) ,             #  t =  u1 * q
+       $u );                                    #     + u
+    $u = $u1;                                   #  u = u1, u1 = t
+    $u1 = $t;
+    $sign = -$sign;
+    ($a, $q, $b) = ($b, _div($c,$a,$b));        # step 1
     }
 
   # if the gcd is not 1, then return NaN
-  return undef unless _is_one($c,$a);
+  return (undef,undef) unless _is_one($c,$a);
 
-  $num = _mod($c,$u,$mod);
-#  print ${_str($c,$num)},"\n";
-  $num;
+  $sign = $sign == 1 ? '+' : '-';
+  ($u1,$sign);
   }
 
 sub _modpow

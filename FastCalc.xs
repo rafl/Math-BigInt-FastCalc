@@ -7,8 +7,217 @@ MODULE = Math::BigInt::FastCalc		PACKAGE = Math::BigInt::FastCalc
  #############################################################################
  # 2002-08-12 0.03 Tels unreleased
  #  * is_zero/is_one/is_odd/is_even/len work now (pass v1.61 tests)
- # 2002-08-13 0.04 tels unreleased
+ # 2002-08-13 0.04 Tels unreleased
  #  * returns no/yes for is_foo() methods to be faster
+ # 2002-08-18 0.06alpha
+ #  * added _num(), _inc() and _dec()
+ # 2002-08-25 0.06 Tels
+ #  * added __strip_zeros(), _copy()
+
+##############################################################################
+# _copy
+
+SV *
+_copy(class, x)
+  SV*	class
+  SV*	x
+  INIT:
+    AV*	a;
+    AV*	a2;
+    /* SV*	temp; */
+    I32	elems;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    elems = av_len(a);			/* number of elems in array */
+    a2 = (AV*)sv_2mortal((SV*)newAV());
+    av_extend (a2, elems);		/* prepadd */
+    while (elems >= 0)
+      {
+      /* av_store( a2,  elems, newSVsv( (SV*)*av_fetch(a, elems, 0) ) ); */
+
+      /* looking and trying to preserve IV is actually slower when copying */
+      /* temp = (SV*)*av_fetch(a, elems, 0);
+      if (SvIOK(temp))
+        {
+        av_store( a2,  elems, newSViv( SvIV( (SV*)*av_fetch(a, elems, 0) )));
+        }
+      else
+        {
+        av_store( a2,  elems, newSVnv( SvNV( (SV*)*av_fetch(a, elems, 0) )));
+        }
+      */
+      av_store( a2,  elems, newSVnv( SvNV( (SV*)*av_fetch(a, elems, 0) )));
+      elems--;
+      }
+    ST(0) = sv_2mortal( newRV_inc((SV*) a2) );
+
+##############################################################################
+# __strip_zeros (also check for empty arrays from div)
+
+SV *
+__strip_zeros(x)
+  SV*	x
+  INIT:
+    AV*	a;
+    SV*	temp;
+    I32	elems;
+    I32	index;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    elems = av_len(a);			/* number of elems in array */
+    ST(0) = x;				/* we return x */
+    if (elems == -1)
+      { 
+      av_push (a, newSViv(0));		/* correct empty arrays */
+      XSRETURN(1);
+      }
+    if (elems == 0)
+      {
+      XSRETURN(1);			/* nothing to do since only one elem */
+      }
+    index = elems;
+    while (index > 0)
+      {
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      if (SvNV(temp) != 0)
+        {
+        break;
+        }
+      index--;
+      }
+    if (index < elems)
+      {
+      index = elems - index;
+      while (index-- > 0)
+        {
+        av_pop (a);
+        }
+      }
+    XSRETURN(1);
+
+##############################################################################
+# decrement (subtract one)
+
+SV *
+_dec(class,x)
+  SV*	class
+  SV*	x
+  INIT:
+    AV*	a;
+    SV*	temp;
+    I32	elems;
+    I32	index;
+    NV	MAX;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    elems = av_len(a);			/* number of elems in array */
+    ST(0) = x;				/* we return x */
+
+    MAX = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) ) - 1;
+    index = 0;
+    while (index <= elems)
+      {
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      sv_setnv (temp, SvNV(temp)-1);
+      if (SvNV(temp) >= 0)
+        {
+        break;				/* early out */
+        }
+      sv_setnv (temp, MAX);		/* overflow, so set this to $MAX */
+      index++;
+      } 
+    /* do have more than one element? */
+    /* (more than one because [0] should be kept as single-element) */
+    if (elems > 0)
+      {
+      temp = *av_fetch(a, elems, 0);	/* fetch last element */
+      if (SvIV(temp) == 0)		/* did last elem overflow? */ 
+        {
+        av_pop(a);			/* yes, so shrink array */
+        				/* aka remove leading zeros */
+        }
+      }
+    XSRETURN(1);			/* return x */
+
+##############################################################################
+# increment (add one)
+
+SV *
+_inc(class,x)
+  SV*	class
+  SV*	x
+  INIT:
+    AV*	a;
+    SV*	temp;
+    I32	elems;
+    I32	index;
+    NV	BASE;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    elems = av_len(a);			/* number of elems in array */
+    ST(0) = x;				/* we return x */
+
+    BASE = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) );
+    index = 0;
+    while (index <= elems)
+      {
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      sv_setnv (temp, SvNV(temp)+1);
+      if (SvNV(temp) < BASE)
+        {
+        XSRETURN(1);			/* return (early out) */
+        }
+      sv_setiv (temp, 0);		/* overflow, so set this elem to 0 */
+      index++;
+      } 
+    temp = *av_fetch(a, elems, 0);	/* fetch last element */
+    if (SvIV(temp) == 0)		/* did last elem overflow? */
+      {
+      av_push(a, newSViv(1));		/* yes, so extend array by 1 */
+      }
+    XSRETURN(1);			/* return x */
+
+##############################################################################
+# Make a number (scalar int/float) from a BigInt object
+
+SV *
+_num(class,x)
+  SV*	class
+  SV*	x
+  INIT:
+    AV*	a;
+    NV	fac;
+    SV*	temp;
+    NV	num;
+    I32	elems;
+    I32	index;
+    NV	BASE;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    elems = av_len(a);			/* number of elems in array */
+
+    if (elems == 0)			/* only one element? */
+      {
+      ST(0) = *av_fetch(a, 0, 0);	/* fetch first (only) element */
+      XSRETURN(1);			/* return it */
+      }
+    fac = 1.0;				/* factor */
+    index = 0;
+    num = 0.0;
+    BASE = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) );
+    while (index <= elems)
+      {
+      temp = *av_fetch(a, index, 0);	/* fetch current element */
+      num += fac * SvNV(temp);
+      fac *= BASE;
+      index++;
+      }
+    ST(0) = newSVnv(num);
 
 ##############################################################################
 

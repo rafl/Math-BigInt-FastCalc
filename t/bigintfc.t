@@ -15,7 +15,7 @@ use Math::BigInt::FastCalc;
 
 BEGIN
   {
-  plan tests => 145;
+  plan tests => 276;
   }
 
 # testing of Math::BigInt::FastCalc
@@ -101,15 +101,12 @@ $x = $C->_new(\"7654321"); ok ($C->_len($x),7);
 $x = $C->_new(\"87654321"); ok ($C->_len($x),8);
 $x = $C->_new(\"987654321"); ok ($C->_len($x),9);
 
-$x = $C->_new(\"0"); ok ($C->_len($x),1);
-$x = $C->_new(\"20"); ok ($C->_len($x),2);
-$x = $C->_new(\"300"); ok ($C->_len($x),3);
-$x = $C->_new(\"4000"); ok ($C->_len($x),4);
-$x = $C->_new(\"50000"); ok ($C->_len($x),5);
-$x = $C->_new(\"600000"); ok ($C->_len($x),6);
-$x = $C->_new(\"7000000"); ok ($C->_len($x),7);
-$x = $C->_new(\"80000000"); ok ($C->_len($x),8);
-$x = $C->_new(\"900000000"); ok ($C->_len($x),9);
+for (my $i = 1; $i < 9; $i++)
+  {
+  my $a = "$i" . '0' x ($i-1);
+  $x = $C->_new(\$a); 
+  print "# Tried len '$a'\n" unless ok ($C->_len($x),$i);
+  }
 
 # _digit
 $x = $C->_new(\"123456789");
@@ -121,8 +118,12 @@ ok ($C->_digit($x,-2),2);
 ok ($C->_digit($x,-3),3);
 
 # _copy
-$x = $C->_new(\"12356");
-ok (${$C->_str($C->_copy($x))},12356);
+foreach (qw/ 1 12 123 1234 12345 123456 1234567 12345678 123456789/)
+  {
+  $x = $C->_new(\"$_");
+  ok (${$C->_str($C->_copy($x))},"$_");
+  ok (${$C->_str($x)},"$_");		# did _copy destroy original x?
+  }
 
 # _zeros
 $x = $C->_new(\"1256000000"); ok ($C->_zeros($x),6);
@@ -144,6 +145,10 @@ $x = $C->_new(\"20000"); $y = $C->_new(\"3");
 ok (${$C->_str($C->_rsft($x,$y,10))},20);
 $x = $C->_new(\"256"); $y = $C->_new(\"4");
 ok (${$C->_str($C->_rsft($x,$y,2))},256 >> 4);
+
+$x = $C->_new(\"6411906467305339182857313397200584952398");
+$y = $C->_new(\"45");
+ok (${$C->_str($C->_rsft($x,$y,10))},0);
 
 # _acmp
 $x = $C->_new(\"123456789");
@@ -167,6 +172,13 @@ ok ($C->_acmp($y,$x),1);
 ok ($C->_acmp($x,$x),0);
 ok ($C->_acmp($y,$y),0);
 
+# _modinv
+$x = $C->_new(\"8");
+$y = $C->_new(\"5033");
+my ($xmod,$sign) = $C->_modinv($x,$y);
+ok (${$C->_str($xmod)},'629');		# -629 % 5033 == 4404
+ok ($sign, '-');
+
 # _div
 $x = $C->_new(\"3333"); $y = $C->_new(\"1111");
 ok (${$C->_str(scalar $C->_div($x,$y))},3);
@@ -176,7 +188,12 @@ $x = $C->_new(\"123"); $y = $C->_new(\"1111");
 ($x,$y) = $C->_div($x,$y); ok (${$C->_str($x)},0); ok (${$C->_str($y)},123);
 
 # _num
-$x = $C->_new(\"12345"); $x = $C->_num($x); ok (ref($x)||'',''); ok ($x,12345);
+foreach (qw/1 12 123 1234 12345 1234567 12345678 123456789 1234567890/)
+  {
+  $x = $C->_new(\"$_"); 
+  ok (ref($x)||'','ARRAY'); ok (${$C->_str($x)},"$_");
+  $x = $C->_num($x); ok (ref($x)||'',''); ok ($x,$_);
+  }
 
 # _sqrt
 $x = $C->_new(\"144"); ok (${$C->_str($C->_sqrt($x))},'12');
@@ -190,8 +207,32 @@ $x = $C->_new(\"4"); ok (${$C->_str($C->_fac($x))},'24');
 $x = $C->_new(\"5"); ok (${$C->_str($C->_fac($x))},'120');
 $x = $C->_new(\"10"); ok (${$C->_str($C->_fac($x))},'3628800');
 $x = $C->_new(\"11"); ok (${$C->_str($C->_fac($x))},'39916800');
+$x = $C->_new(\"12"); ok (${$C->_str($C->_fac($x))},'479001600');
 
-# _inc
+##############################################################################
+# _inc and _dec
+foreach (qw/1 11 121 1231 12341 1234561 12345671 123456781 1234567891/)
+  {
+  $x = $C->_new(\"$_"); $C->_inc($x);
+  print "# \$x = ",${$C->_str($x)},"\n"
+   unless ok (${$C->_str($x)},substr($_,0,length($_)-1) . '2');
+  $C->_dec($x); ok (${$C->_str($x)},$_);
+  }
+foreach (qw/19 119 1219 12319 1234519 12345619 123456719 1234567819/)
+  {
+  $x = $C->_new(\"$_"); $C->_inc($x);
+  print "# \$x = ",${$C->_str($x)},"\n"
+   unless ok (${$C->_str($x)},substr($_,0,length($_)-2) . '20');
+  $C->_dec($x); ok (${$C->_str($x)},$_);
+  }
+foreach (qw/999 9999 99999 9999999 99999999 999999999 9999999999 99999999999/)
+  {
+  $x = $C->_new(\"$_"); $C->_inc($x);
+  print "# \$x = ",${$C->_str($x)},"\n"
+   unless ok (${$C->_str($x)}, '1' . '0' x (length($_)));
+  $C->_dec($x); ok (${$C->_str($x)},$_);
+  }
+
 $x = $C->_new(\"1000"); $C->_inc($x); ok (${$C->_str($x)},'1001');
 $C->_dec($x); ok (${$C->_str($x)},'1000');
 
@@ -211,6 +252,7 @@ $x = $C->_new(\$x); $C->_dec($x); ok (${$C->_str($x)},$z);
 # should not happen:
 # $x = $C->_new(\"-2"); $y = $C->_new(\"4"); ok ($C->_acmp($x,$y),-1);
 
+###############################################################################
 # _mod
 $x = $C->_new(\"1000"); $y = $C->_new(\"3");
 ok (${$C->_str(scalar $C->_mod($x,$y))},1);
@@ -237,6 +279,37 @@ ok (${$C->_str(scalar $C->_from_bin( $C->_as_bin( $C->_new(\"128"))))}, 128);
 $x = $C->_new(\"123456789");
 ok ($C->_check($x),0);
 ok ($C->_check(123),'123 is not a reference');
+
+###############################################################################
+# __strip_zeros
+
+{
+  no strict 'refs';
+  # correct empty arrays
+  $x = &{$C."::__strip_zeros"}([]); ok (@$x,1); ok ($x->[0],0);
+  # don't strip single elements
+  $x = &{$C."::__strip_zeros"}([0]); ok (@$x,1); ok ($x->[0],0);
+  $x = &{$C."::__strip_zeros"}([1]); ok (@$x,1); ok ($x->[0],1);
+  # don't strip non-zero elements
+  $x = &{$C."::__strip_zeros"}([0,1]);
+  ok (@$x,2); ok ($x->[0],0); ok ($x->[1],1);
+  $x = &{$C."::__strip_zeros"}([0,1,2]);
+  ok (@$x,3); ok ($x->[0],0); ok ($x->[1],1); ok ($x->[2],2);
+
+  # but strip leading zeros
+  $x = &{$C."::__strip_zeros"}([0,1,2,0]);
+  ok (@$x,3); ok ($x->[0],0); ok ($x->[1],1); ok ($x->[2],2);
+
+  $x = &{$C."::__strip_zeros"}([0,1,2,0,0]);
+  ok (@$x,3); ok ($x->[0],0); ok ($x->[1],1); ok ($x->[2],2);
+
+  $x = &{$C."::__strip_zeros"}([0,1,2,0,0,0]);
+  ok (@$x,3); ok ($x->[0],0); ok ($x->[1],1); ok ($x->[2],2);
+
+  # collapse multiple zeros
+  $x = &{$C."::__strip_zeros"}([0,0,0,0]);
+  ok (@$x,1); ok ($x->[0],0);
+}
 
 ###############################################################################
 # _to_large and _to_small (last since they toy with BASE_LEN etc)

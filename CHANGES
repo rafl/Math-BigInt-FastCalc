@@ -20,13 +20,35 @@ Revision history for Perl extension Math::BigInt::FastCalc.
   * is_*() methods are quite a bit faster than in Calc, but due to the
     overhead in Math::BigInt real programs will get only a bit faster
     (around 2-5%).
-  * Comparisation is *much* faster, and even via Math::BigInt improves
-    the performance by about factor 9 for large numbers. For smalle numbers
-    (less than 8000 digits) it is still about factor 2.5 to 8. This is only
-    valid if the numbers have both the same length. If the length is
-     different, then FastCalc is about factor 1.2 to 1.7 faster than Calc.
+  * Comparisation is *much* faster, and even via Math::BigInt improves the
+    performance by about factor 9 for large numbers. For smaller numbers (less
+    than 8000 digits) it is still about factor 2.5 to 8. This is only valid if
+    the numbers have both the same length. If the length is different, then
+    FastCalc is still about a factor of 1.2 to 1.7 faster than Calc.
 
-2002-08-13 0.05 Tels
-  * note that _len() and _acmp() are in XS was missing
-  * cleaned of distribution of unwanted files
+2002-08-13 0.05 Tels (5224 tests)
+  * the note that "_len() and _acmp() are in XS" was missing
+  * cleaned distribution of unwanted files
 
+2002-08-25 0.06 Tels (5355 tests)
+  * working _modinv() and fix for _rsft() taken over from Calc v0.32
+  * added tests for _rsft() and _modinv()
+  * require Math::BigInt v1.62
+  * _num(), _dec() and _inc() are now in XS
+    $MBI->numify() is about 50% faster
+    $MBI->binc()/$MBI->bdec() are about 5-8% faster for numbers that don't
+    overflow (much), and about 14% for ('9' x 100)->binc()
+  * __strip_zeros() is no in XS, making it roughly 3 times as fast
+  * added _copy(): more than twice as fast for large (> 1000 digits) numbers:
+
+ Math::BigInt::Calc v0.32
+          1:  3s ( 3.23 usr +  0.00 sys =  3.23 CPU) @ 38128/s (n=123154)
+        100:  3s ( 3.19 usr +  0.00 sys =  3.19 CPU) @ 27397/s (n=87397)
+       1000:  4s ( 3.29 usr +  0.00 sys =  3.29 CPU) @  8042/s (n=26460)
+      10000:  4s ( 3.19 usr +  0.01 sys =  3.20 CPU) @   984/s (n=3149)
+ 
+ Math::BigInt::FastCalc v0.06
+          1:  3s ( 3.12 usr +  0.01 sys =  3.13 CPU) @ 39346/s (n=123155)
+        100:  3s ( 3.10 usr +  0.00 sys =  3.10 CPU) @ 34138/s (n=105830)
+       1000:  3s ( 3.09 usr +  0.00 sys =  3.09 CPU) @ 15807/s (n=48844)
+      10000:  3s ( 3.20 usr +  0.00 sys =  3.20 CPU) @  2362/s (n=7559)
