@@ -63,3 +63,8 @@ Revision history for Perl extension Math::BigInt::FastCalc.
   * remove needless Exporter in FastCalc
   * Makefile.PL: add writing of own meta file with correct licence
   * take over changes from Calc 0.44
+
+2005-03-20 0.09 Tels (5953 tests)
+  * take over changes from Calc 0.45 (fix bug with div shortcut)
+  * require Math::BigInt v1.75 and use its tests
+

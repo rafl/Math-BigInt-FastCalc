@@ -10,7 +10,7 @@ use vars qw/@ISA $VERSION $BASE_LEN $BASE/;
 
 @ISA = qw(DynaLoader);
 
-$VERSION = '0.08';
+$VERSION = '0.09';
 
 bootstrap Math::BigInt::FastCalc $VERSION;
 
@@ -189,9 +189,6 @@ BEGIN
     } while ($OR_BITS < $max && $x == $z && $y == $x);
   $OR_BITS --;						# retreat one step
   
-  $AND_MASK = __PACKAGE__->_new( ( 2 ** $AND_BITS ));
-  $XOR_MASK = __PACKAGE__->_new( ( 2 ** $XOR_BITS ));
-  $OR_MASK = __PACKAGE__->_new( ( 2 ** $OR_BITS ));
   }
 
 ###############################################################################
@@ -199,6 +196,10 @@ BEGIN
 sub import 
   { 
   Math::BigInt::FastCalc::_set_XS_BASE($BASE,$BASE_LEN);
+
+  $AND_MASK = __PACKAGE__->_new( ( 2 ** $AND_BITS ));
+  $XOR_MASK = __PACKAGE__->_new( ( 2 ** $XOR_BITS ));
+  $OR_MASK = __PACKAGE__->_new( ( 2 ** $OR_BITS ));
   }
 
 ##############################################################################
@@ -520,7 +521,25 @@ sub _div_use_mul
       # between 1 and MAX_VAL (e.g. one element) and rem is not wanted.
       if (!wantarray)
         {
-        $x->[0] = int($x->[-1] / $yorg->[-1]);
+        # fit's into one Perl scalar, so result can be computed directly
+        # cannot use int() here, because it rounds wrongly on some systems
+        #$x->[0] = int($x->[-1] / $yorg->[-1]);
+
+        # Due to chopping up the number into parts, the two first parts
+        # may have only one or two digits. So we use more from the second
+        # parts (it always has at least two parts) for more accuracy:
+        # Round to 8 digits, then truncate result to integer:
+        my $x0 = $x->[-1];
+        my $y0 = $yorg->[-1];
+        if (length ($x0) < $BASE_LEN)           # len($x0) == len($y0)!
+          {
+          $x0 .= substr('0' x $BASE_LEN . $x->[-2], -$BASE_LEN, $BASE_LEN);
+          $x0 = substr($x0,0,$BASE_LEN);
+          $y0 .= substr('0' x $BASE_LEN . $yorg->[-2], -$BASE_LEN, $BASE_LEN);
+          $y0 = substr($y0,0,$BASE_LEN);
+          }
+        $x->[0] = int ( sprintf ("%.8f", $x0 / $y0 ) );
+
         splice(@$x,1);                  # keep single element
         return $x;
         }
@@ -717,8 +736,26 @@ sub _div_use_div
       # between 1 and MAX_VAL (e.g. one element) and rem is not wanted.
       if (!wantarray)
         {
-        $x->[0] = int($x->[-1] / $yorg->[-1]);
-        splice(@$x,1);			# keep single element
+        # fit's into one Perl scalar, so result can be computed directly
+        # cannot use int() here, because it rounds wrongly on some systems
+        #$x->[0] = int($x->[-1] / $yorg->[-1]);
+
+        # Due to chopping up the number into parts, the two first parts
+        # may have only one or two digits. So we use more from the second
+        # parts (it always has at least two parts) for more accuracy:
+        # Round to 8 digits, then truncate result to integer:
+        my $x0 = $x->[-1];
+        my $y0 = $yorg->[-1];
+        if (length ($x0) < $BASE_LEN)           # len($x0) == len($y0)!
+          {
+          $x0 .= substr('0' x $BASE_LEN . $x->[-2], -$BASE_LEN, $BASE_LEN);
+          $x0 = substr($x0,0,$BASE_LEN);
+          $y0 .= substr('0' x $BASE_LEN . $yorg->[-2], -$BASE_LEN, $BASE_LEN);
+          $y0 = substr($y0,0,$BASE_LEN);
+          }
+        $x->[0] = int ( sprintf ("%.8f", $x0 / $y0 ) );
+
+        splice(@$x,1);                  # keep single element
         return $x;
         }
 
@@ -1952,7 +1989,7 @@ Original math code by Mark Biggar, rewritten by Tels L<http://bloodgate.com/>
 in late 2000.
 Seperated from BigInt and shaped API with the help of John Peacock.
 Fixed, sped-up and enhanced by Tels http://bloodgate.com 2001-2003.
-Further streamlining (api_version 1) by Tels 2004.
+Further streamlining (api_version 1 etc) by Tels 2004-2005.
 
 =head1 SEE ALSO
 
