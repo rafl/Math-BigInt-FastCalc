@@ -1,0 +1,43 @@
+Math::BigInt::Calc => v0.30
+Benchmark: running calcodd, calcone, calczeroe, mbiodd, mbione, mbizero, xsodd, xsone, xszero for at least 3 CPU seconds...
+   calcodd:  3s ( 3.15 usr +  0.00 sys =  3.15 CPU) @ 39096.51/s (n=123154)
+   calcone:  3s ( 3.10 usr +  0.00 sys =  3.10 CPU) @ 40277.74/s (n=124861)
+  calczero:  3s ( 3.05 usr +  0.00 sys =  3.05 CPU) @ 39191.15/s (n=119533)
+    mbiodd:  5s ( 3.31 usr +  0.00 sys =  3.31 CPU) @ 28288.82/s (n=93636)
+    mbione:  4s ( 3.15 usr +  0.00 sys =  3.15 CPU) @ 27924.13/s (n=87961)
+   mbizero:  3s ( 3.08 usr +  0.00 sys =  3.08 CPU) @ 26603.90/s (n=81940)
+     xsodd:  3s ( 3.07 usr +  0.00 sys =  3.07 CPU) @ 67560.26/s (n=207410)
+     xsone:  3s ( 3.01 usr +  0.00 sys =  3.01 CPU) @ 70325.25/s (n=211679)
+    xszero:  4s ( 3.19 usr +  0.00 sys =  3.19 CPU) @ 70193.42/s (n=223917)
+
+5.6.1: Math::BigInt::FastCalc => v0.03
+Benchmark: running mbiodd, mbione, mbizero for at least 3 CPU seconds...
+    mbiodd:  3s ( 3.26 usr +  0.00 sys =  3.26 CPU) @ 35416.26/s (n=115457)
+    mbione:  5s ( 3.15 usr +  0.00 sys =  3.15 CPU) @ 33596.83/s (n=105830)
+   mbizero:  4s ( 3.00 usr +  0.00 sys =  3.00 CPU) @ 32563.00/s (n=97689)
+
+5.8.0: Math::BigInt::FastCalc => v0.03
+Benchmark: running mbiodd, mbione, mbizero for at least 3 CPU seconds...
+    mbiodd:  3s ( 3.08 usr +  0.00 sys =  3.08 CPU) @ 36350.00/s (n=111958)
+    mbione:  4s ( 3.05 usr +  0.00 sys =  3.05 CPU) @ 34081.97/s (n=103950)
+   mbizero:  3s ( 3.04 usr +  0.00 sys =  3.04 CPU) @ 33760.53/s (n=102632)
+
+setting one/zero/two:
+
+Math::BigInt::Calc => v0.30
+Benchmark: running calc_one, calc_two, calc_zero, mbi_one, mbi_zero, xs_one, xs_two, xs_zero for at least 3 CPU seconds...
+  calc_one:  5s ( 3.05 usr +  0.01 sys =  3.06 CPU) @ 63776.14/s (n=195155)
+  calc_two:  4s ( 3.06 usr +  0.01 sys =  3.07 CPU) @ 65706.19/s (n=201718)
+ calc_zero:  3s ( 3.08 usr +  0.00 sys =  3.08 CPU) @ 64175.00/s (n=197659)
+   mbi_one:  4s ( 3.06 usr +  0.00 sys =  3.06 CPU) @ 11529.08/s (n=35279)
+  mbi_zero:  3s ( 3.20 usr +  0.00 sys =  3.20 CPU) @ 12448.75/s (n=39836)
+    xs_one:  5s ( 3.20 usr +  0.04 sys =  3.24 CPU) @ 124504.01/s (n=403393)
+    xs_two:  4s ( 2.99 usr +  0.03 sys =  3.02 CPU) @ 120155.63/s (n=362870)
+   xs_zero:  4s ( 3.00 usr +  0.05 sys =  3.05 CPU) @ 124345.57/s (n=379254)
+
+Math::BigInt::FastCalc => v0.03
+Benchmark: running mbi_one, mbi_zero for at least 3 CPU seconds...
+   mbi_one:  4s ( 3.18 usr +  0.00 sys =  3.18 CPU) @ 12883.65/s (n=40970)
+  mbi_zero:  4s ( 3.19 usr +  0.00 sys =  3.19 CPU) @ 13271.16/s (n=42335)
+
+

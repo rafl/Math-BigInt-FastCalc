@@ -1,0 +1,26 @@
+Math::BigInt::FastCalc => v0.04
+bcmp_large:  4s ( 2.98 usr +  0.02 sys =  3.00 CPU) @ 19448/s (n=58346)  1.17
+bcmp_small:  4s ( 3.13 usr +  0.00 sys =  3.13 CPU) @ 18441/s (n=57723)  1.7
+  bcmp_100:  2s ( 3.09 usr +  0.00 sys =  3.09 CPU) @ 17598/s (n=54379)  2.5
+ bcmp_1000:  4s ( 3.05 usr +  0.00 sys =  3.05 CPU) @ 11524/s (n=35150)  5.3
+ bpow_2000:  4s ( 3.10 usr +  0.00 sys =  3.10 CPU) @  8273/s (n=25648)  6.6
+ bpow_4000:  4s ( 3.00 usr +  0.00 sys =  3.00 CPU) @  5194/s (n=15584)  7.7
+ bpow_8000:  4s ( 3.13 usr +  0.00 sys =  3.13 CPU) @  3070/s (n=9612)   8.9
+
+Math::BigInt::Calc => v0.30
+bcmp_large:  4s ( 3.21 usr +  0.00 sys =  3.21 CPU) @ 16482/s (n=52910)
+bcmp_small:  4s ( 3.00 usr +  0.00 sys =  3.00 CPU) @ 10569/s (n=31708)
+ bcmp_100:   4s ( 3.00 usr +  0.00 sys =  3.00 CPU) @  7087/s (n=21262)
+ bcmp_1000:  4s ( 3.27 usr +  0.00 sys =  3.27 CPU) @  2157/s (n=7056)
+ bpow_2000:  4s ( 3.22 usr +  0.00 sys =  3.22 CPU) @  1251/s (n=4031)
+ bpow_4000:  4s ( 3.15 usr +  0.00 sys =  3.15 CPU) @   669/s (n=2110)  
+ bpow_8000:  4s ( 3.20 usr +  0.00 sys =  3.20 CPU) @   344/s (n=1102)
+
+Math::BigInt::Calc => v0.31
+bcmp_large:  3s ( 3.13 usr +  0.00 sys =  3.13 CPU) @ 16692/s (n=52247)
+bcmp_small:  4s ( 3.01 usr +  0.00 sys =  3.01 CPU) @ 11619/s (n=34974)
+ bcmp_100:   4s ( 3.31 usr +  0.01 sys =  3.32 CPU) @  8226/s (n=27313)
+ bcmp_1000:  4s ( 3.17 usr +  0.00 sys =  3.17 CPU) @  2206/s (n=6996)
+ bpow_2000:  4s ( 3.23 usr +  0.00 sys =  3.23 CPU) @  1247/s (n=4031)
+ bpow_4000:  4s ( 3.25 usr +  0.00 sys =  3.25 CPU) @   662/s (n=2154)
+ bpow_8000:  4s ( 3.32 usr +  0.00 sys =  3.32 CPU) @   342/s (n=1138) 
