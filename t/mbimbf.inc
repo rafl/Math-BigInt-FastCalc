@@ -91,8 +91,10 @@ foreach my $class ($mbi,$mbf)
   ok (${"$mbf\::round_mode"},'zero');
   ok (${"$mbi\::round_mode"},'-inf');	# from above
 
+  # reset for further tests
   ${"$mbi\::accuracy"} = undef;
   ${"$mbi\::precision"} = undef;
+  ${"$mbf\::div_scale"} = 40;
 }
 
 # local copies
@@ -262,9 +264,9 @@ foreach my $c ($mbi,$mbf)
   ok ($c->bpow(2,16),65536);
   ok ($c->bpow(2,$c->new(16)),65536);
 
-#  ok ($c->new(2**15)->brsft(1),2**14);
-#  ok ($c->brsft(2**15,1),2**14);
-#  ok ($c->brsft(2**15,$c->new(1)),2**14);
+  ok ($c->new(2**15)->brsft(1),2**14);
+  ok ($c->brsft(2**15,1),2**14);
+  ok ($c->brsft(2**15,$c->new(1)),2**14);
 
   ok ($c->new(2**13)->blsft(1),2**14);
   ok ($c->blsft(2**13,1),2**14);
@@ -318,6 +320,37 @@ $x = $mbi->new(-123401); $x->{_a} = 4; ok ($x->bneg(),123401);
 $mbf->round_mode('even');
 $x = $mbf->new('740.7')->fdiv('6',4,undef,'zero'); ok ($x,'123.4');
 
+$x = $mbi->new('123456'); $y = $mbi->new('123456'); $y->{_a} = 6;
+ok ($x->bdiv($y),1); ok ($x->{_a},6);			# carried over
+
+$x = $mbi->new('123456'); $y = $mbi->new('123456'); $x->{_a} = 6;
+ok ($x->bdiv($y),1); ok ($x->{_a},6);			# carried over
+
+$x = $mbi->new('123456'); $y = $mbi->new('223456'); $y->{_a} = 6;
+ok ($x->bdiv($y),0); ok ($x->{_a},6);			# carried over
+
+$x = $mbi->new('123456'); $y = $mbi->new('223456'); $x->{_a} = 6;
+ok ($x->bdiv($y),0); ok ($x->{_a},6);			# carried over
+
+###############################################################################
+# test that bop(0) does the same than bop(undef)
+
+$x = $mbf->new('1234567890');
+ok ($x->copy()->bsqrt(0),$x->copy()->bsqrt(undef));
+ok ($x->copy->bsqrt(0),'35136.41828644462161665823116758077037159');
+
+ok_undef ($x->{_a});
+
+# test that bsqrt() modifies $x and does not just return something else
+# (especially under BareCalc)
+$z = $x->bsqrt();
+ok ($z,$x); ok ($x,'35136.41828644462161665823116758077037159');
+
+$x = $mbf->new('1.234567890123456789');
+ok ($x->copy()->bpow('0.5',0),$x->copy()->bpow('0.5',undef));
+ok ($x->copy()->bpow('0.5',0),$x->copy()->bsqrt(undef));
+ok ($x->copy()->bpow('2',0),'1.524157875323883675019051998750190521');
+
 ###############################################################################
 # test (also under Bare) that bfac() rounds at last step
 
@@ -361,7 +394,16 @@ $z = $u->copy()->bmul($y,undef,2,'odd'); ok ($z,30860);
 $z = $u->copy()->bmul($y,undef,3,'odd'); ok ($z,30900);
 $z = $u->copy()->bmul($y,undef,-1,'odd'); ok ($z,30862.5);
 
-# breakage:
+my $warn = ''; $SIG{__WARN__} = sub { $warn = shift; };
+# these should warn, since '3.17' is a NaN in BigInt and thus >= returns undef
+$warn = ''; eval "\$z = 3.17 <= \$y"; ok ($z, 1);
+print "# Got: '$warn'\n" unless
+ok ($warn =~ /^Use of uninitialized value (\$y )?(in numeric le \(<=\) |)at/);	
+$warn = ''; eval "\$z = \$y >= 3.17"; ok ($z, 1);
+print "# Got: '$warn'\n" unless
+ok ($warn =~ /^Use of uninitialized value (\$y )?(in numeric ge \(>=\) |)at/);	
+
+# XXX TODO breakage:
 # $z = $y->copy()->bmul($u,2,0,'odd'); ok ($z,31000);
 # $z = $y * $u; ok ($z,5); ok (ref($z),$mbi);
 # $z = $y + $x; ok ($z,12); ok (ref($z),$mbi);
@@ -502,6 +544,17 @@ $x = $mbf->new('12340'); $x->bfround(2); ok ($x,'12340');
 $x = $mbi->new('1234'); $x->accuracy(3); $x->bfround(-2);
 ok_undef ($x->{_a});
 
+# test that bfround() and bround() work with large numbers
+
+$x = $mbf->new(1)->bdiv(5678,undef,-63);
+ok ($x, '0.000176118351532229658330398027474462839027826699542092286016203');
+
+$x = $mbf->new(1)->bdiv(5678,undef,-90);
+ok ($x, '0.000176118351532229658330398027474462839027826699542092286016202888340965128566396618527651');
+
+$x = $mbf->new(1)->bdiv(5678,80);
+ok ($x, '0.00017611835153222965833039802747446283902782669954209228601620288834096512856639662');
+
 ###############################################################################
 # rounding with already set precision/accuracy
 
@@ -523,8 +576,9 @@ ok ($x->{_a},2);
 # mantissa/exponent format and A/P
 $x = $mbf->new('12345.678'); $x->accuracy(4);
 ok ($x,'12350'); ok ($x->{_a},4); ok_undef ($x->{_p});
-ok_undef ($x->{_m}->{_a}); ok_undef ($x->{_e}->{_a});
-ok_undef ($x->{_m}->{_p}); ok_undef ($x->{_e}->{_p});
+
+#ok_undef ($x->{_m}->{_a}); ok_undef ($x->{_e}->{_a});
+#ok_undef ($x->{_m}->{_p}); ok_undef ($x->{_e}->{_p});
 
 # check for no A/P in case of fallback
 # result
@@ -609,12 +663,14 @@ ok ($params[0],$x);				# self
   @params = $x->_find_round_parameters(undef,-2);
   ok (scalar @params,1);			# error, A and P defined
   ok ($params[0],$x);				# self
+  ok ($x->is_nan(),1);				# and must be NaN
 
   ${"$mbi\::accuracy"} = undef;
   ${"$mbi\::precision"} = 1;
   @params = $x->_find_round_parameters(1,undef);
   ok (scalar @params,1);			# error, A and P defined
   ok ($params[0],$x);				# self
+  ok ($x->is_nan(),1);				# and must be NaN
  
   ${"$mbi\::precision"} = undef;		# reset
 }
@@ -748,7 +804,7 @@ while (<DATA>)
   
   $try .= "\$x->$f(\$y);";
   
-  #  print "trying $try\n";
+  # print "trying $try\n";
   $rc = eval $try;
   # convert hex/binary targets to decimal
   if ($ans =~ /^(0x0x|0b0b)/)

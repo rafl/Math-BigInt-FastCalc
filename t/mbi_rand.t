@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use Test;
+use Test::More;
 use strict;
 
 my $count;
@@ -49,17 +49,17 @@ for (my $i = 0; $i < $count; $i++)
   # print "# A $A\n# B $B\n";
   if ($A->is_zero() || $B->is_zero())
     {
-    ok (1,1); ok (1,1); next;
+    is (1,1); is (1,1); next;
     }
   # check that int(A/B)*B + A % B == A holds for all inputs
   # $X = ($A/$B)*$B + 2 * ($A % $B) - ($A % $B);
   ($ADB,$AMB) = $A->copy()->bdiv($B);
   print "# ". join(' ',Math::BigInt::Calc->_base_len()),"\n"
-   unless ok ($ADB*$B+$two*$AMB-$AMB,$As);
+   unless is ($ADB*$B+$two*$AMB-$AMB,$As);
   # swap 'em and try this, too
   # $X = ($B/$A)*$A + $B % $A;
   ($ADB,$AMB) = $B->copy()->bdiv($A);
   print "# ". join(' ',Math::BigInt::Calc->_base_len()),"\n"
-   unless ok ($ADB*$A+$two*$AMB-$AMB,$Bs);
+   unless is ($ADB*$A+$two*$AMB-$AMB,$Bs);
   }
 

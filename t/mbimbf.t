@@ -32,7 +32,7 @@ BEGIN
     }
   print "# INC = @INC\n";
 
-  plan tests => 657 
+  plan tests => 684 
     + 17;		# own tests
   }
 
@@ -59,16 +59,16 @@ ok ($Math::BigInt::rnd_mode,'even');
 ok ($Math::BigFloat::rnd_mode,'even');
 
 my $x = eval '$mbi->round_mode("huhmbi");';
-ok ($@ =~ /^Unknown round mode huhmbi at/);
+print "# $@\n" unless ok ($@ =~ /^Unknown round mode 'huhmbi' at/);
 
 $x = eval '$mbf->round_mode("huhmbf");';
-ok ($@ =~ /^Unknown round mode huhmbf at/);
+print "# $@\n" unless ok ($@ =~ /^Unknown round mode 'huhmbf' at/);
 
 # old way (now with test for validity)
 $x = eval '$Math::BigInt::rnd_mode = "huhmbi";';
-ok ($@ =~ /^Unknown round mode huhmbi at/);
+print "# $@\n" unless ok ($@ =~ /^Unknown round mode 'huhmbi' at/);
 $x = eval '$Math::BigFloat::rnd_mode = "huhmbf";';
-ok ($@ =~ /^Unknown round mode huhmbf at/);
+print "# $@\n" unless ok ($@ =~ /^Unknown round mode 'huhmbf' at/);
 # see if accessor also changes old variable
 $mbi->round_mode('odd'); ok ($Math::BigInt::rnd_mode,'odd');
 $mbf->round_mode('odd'); ok ($Math::BigInt::rnd_mode,'odd');

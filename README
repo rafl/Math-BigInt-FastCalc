@@ -10,7 +10,7 @@ This is always safe to use, since:
 
   * FastCalc is always faster than Calc, or equal in speed, it will be never
     slower
-  * if FastCalc is not installed, Math::BigInt will use Calc.
+  * if FastCalc is not installed, Math::BigInt will automatically use Calc.
 
 Of course, it also works with Math::BigFloat
 
@@ -35,5 +35,5 @@ To install this module type the following:
    make test
    make install		# as root
 
-Copyright (C) 2002 Tels - http://bloodgate.com/perl
+Copyright (C) 2002-2004 Tels - http://bloodgate.com/perl
 

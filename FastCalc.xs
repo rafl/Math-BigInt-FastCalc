@@ -2,6 +2,9 @@
 #include "perl.h"
 #include "XSUB.h"
 
+double XS_BASE = 0;
+double XS_BASE_LEN = 0;
+
 MODULE = Math::BigInt::FastCalc		PACKAGE = Math::BigInt::FastCalc
 
  #############################################################################
@@ -13,18 +16,27 @@ MODULE = Math::BigInt::FastCalc		PACKAGE = Math::BigInt::FastCalc
  #  * added _num(), _inc() and _dec()
  # 2002-08-25 0.06 Tels
  #  * added __strip_zeros(), _copy()
+ # 2004-08-13 0.07 Tels
+ #  * added _is_two(), _is_ten(), _ten()
+
+void 
+_set_XS_BASE(BASE, BASE_LEN)
+  SV* BASE
+  SV* BASE_LEN
+
+  CODE:
+    XS_BASE = SvNV(BASE); 
+    XS_BASE_LEN = SvIV(BASE_LEN); 
 
 ##############################################################################
 # _copy
 
-SV *
+void
 _copy(class, x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
     AV*	a2;
-    /* SV*	temp; */
     I32	elems;
 
   CODE:
@@ -55,7 +67,7 @@ _copy(class, x)
 ##############################################################################
 # __strip_zeros (also check for empty arrays from div)
 
-SV *
+void
 __strip_zeros(x)
   SV*	x
   INIT:
@@ -100,9 +112,8 @@ __strip_zeros(x)
 ##############################################################################
 # decrement (subtract one)
 
-SV *
+void
 _dec(class,x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -116,7 +127,7 @@ _dec(class,x)
     elems = av_len(a);			/* number of elems in array */
     ST(0) = x;				/* we return x */
 
-    MAX = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) ) - 1;
+    MAX = XS_BASE - 1;
     index = 0;
     while (index <= elems)
       {
@@ -145,9 +156,8 @@ _dec(class,x)
 ##############################################################################
 # increment (add one)
 
-SV *
+void
 _inc(class,x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -161,7 +171,7 @@ _inc(class,x)
     elems = av_len(a);			/* number of elems in array */
     ST(0) = x;				/* we return x */
 
-    BASE = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) );
+    BASE = XS_BASE;
     index = 0;
     while (index <= elems)
       {
@@ -184,9 +194,8 @@ _inc(class,x)
 ##############################################################################
 # Make a number (scalar int/float) from a BigInt object
 
-SV *
+void
 _num(class,x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -209,7 +218,7 @@ _num(class,x)
     fac = 1.0;				/* factor */
     index = 0;
     num = 0.0;
-    BASE = SvNV( get_sv("Math::BigInt::FastCalc::BASE", FALSE) );
+    BASE = XS_BASE;
     while (index <= elems)
       {
       temp = *av_fetch(a, index, 0);	/* fetch current element */
@@ -221,9 +230,8 @@ _num(class,x)
 
 ##############################################################################
 
-SV *
+void
 _zero(class)
-  SV*	class
   INIT:
     AV* a;
 
@@ -234,9 +242,8 @@ _zero(class)
 
 ##############################################################################
 
-SV *
+void
 _one(class)
-  SV*	class
   INIT:
     AV* a;
 
@@ -247,9 +254,8 @@ _one(class)
 
 ##############################################################################
 
-SV *
+void
 _two(class)
-  SV*	class
   INIT:
     AV* a;
 
@@ -260,9 +266,20 @@ _two(class)
 
 ##############################################################################
 
-SV *
+void
+_ten(class)
+  INIT:
+    AV* a;
+
+  CODE:
+    a = newAV();
+    av_push (a, newSViv( 10 ));		/* ten */
+    ST(0) = newRV_noinc((SV*) a);
+
+##############################################################################
+
+void
 _is_even(class, x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -275,9 +292,8 @@ _is_even(class, x)
 
 ##############################################################################
 
-SV *
+void
 _is_odd(class, x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -290,9 +306,8 @@ _is_odd(class, x)
 
 ##############################################################################
 
-SV *
+void
 _is_one(class, x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -305,14 +320,51 @@ _is_one(class, x)
       ST(0) = &PL_sv_no;
       XSRETURN(1);			/* len != 1, can't be '1' */
       }
-    temp = *av_fetch(a, 0, 0);	/* fetch first element */
+    temp = *av_fetch(a, 0, 0);		/* fetch first element */
     ST(0) = boolSV((SvIV(temp) == 1));
 
 ##############################################################################
 
-SV *
+void
+_is_two(class, x)
+  SV*	x
+  INIT:
+    AV*	a;
+    SV*	temp;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    if ( av_len(a) != 0)
+      {
+      ST(0) = &PL_sv_no;
+      XSRETURN(1);			/* len != 1, can't be '2' */
+      }
+    temp = *av_fetch(a, 0, 0);		/* fetch first element */
+    ST(0) = boolSV((SvIV(temp) == 2));
+
+##############################################################################
+
+void
+_is_ten(class, x)
+  SV*	x
+  INIT:
+    AV*	a;
+    SV*	temp;
+
+  CODE:
+    a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
+    if ( av_len(a) != 0)
+      {
+      ST(0) = &PL_sv_no;
+      XSRETURN(1);			/* len != 1, can't be '10' */
+      }
+    temp = *av_fetch(a, 0, 0);		/* fetch first element */
+    ST(0) = boolSV((SvIV(temp) == 10));
+
+##############################################################################
+
+void
 _is_zero(class, x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
@@ -328,37 +380,29 @@ _is_zero(class, x)
     temp = *av_fetch(a, 0, 0);		/* fetch first element */
     ST(0) = boolSV((SvIV(temp) == 0));
 
-
 ##############################################################################
 
-SV *
+void
 _len(class,x)
-  SV*	class
   SV*	x
   INIT:
     AV*	a;
     SV*	temp;
     NV	elems;
-    SV*	base_len;
     STRLEN len;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = (NV) av_len(a);			/* number of elems in array */
+    elems = (NV) av_len(a);		/* number of elems in array */
     temp = *av_fetch(a, elems, 0);	/* fetch last element */
     SvPV(temp, len);			/* convert to string & store length */
-    if ( elems != 0 )
-      {
-      base_len = get_sv("Math::BigInt::FastCalc::BASE_LEN", FALSE);
-      len += SvIV(base_len) * elems;
-      }
+    len += XS_BASE_LEN * elems;
     ST(0) = newSViv(len);
 
 ##############################################################################
 
-SV *
+void
 _acmp(class, cx, cy);
-  SV*  class
   SV*  cx
   SV*  cy
   INIT:
@@ -381,12 +425,12 @@ _acmp(class, cx, cy);
 
     if (diff > 0)
       {
-      ST(0) = newSViv(1);
+      ST(0) = newSViv(1);		/* len differs: X > Y */
       XSRETURN(1);
       }
     if (diff < 0)
       {
-      ST(0) = newSViv(-1);
+      ST(0) = newSViv(-1);		/* len differs: X < Y */
       XSRETURN(1);
       }
     /* both have same number of elements, so check length of last element
@@ -398,15 +442,16 @@ _acmp(class, cx, cy);
     diff_str = (I32)lenx - (I32)leny;
     if (diff_str > 0)
       {
-      ST(0) = newSViv(1);
+      ST(0) = newSViv(1);		/* same len, but first elems differs in len */
       XSRETURN(1);
       }
     if (diff_str < 0)
       {
-      ST(0) = newSViv(-1);
+      ST(0) = newSViv(-1);		/* same len, but first elems differs in len */
       XSRETURN(1);
       }
     /* same number of digits, so need to make a full compare */
+    diff_nv = 0;
     while (elemsx >= 0)
       {
       tempx = *av_fetch(array_x, elemsx, 0);	/* fetch curr x element */

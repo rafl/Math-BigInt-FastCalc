@@ -52,3 +52,8 @@ Revision history for Perl extension Math::BigInt::FastCalc.
         100:  3s ( 3.10 usr +  0.00 sys =  3.10 CPU) @ 34138/s (n=105830)
        1000:  3s ( 3.09 usr +  0.00 sys =  3.09 CPU) @ 15807/s (n=48844)
       10000:  3s ( 3.20 usr +  0.00 sys =  3.20 CPU) @  2362/s (n=7559)
+2004-08-13 0.07 Tels (5953 tests)
+  * require BigInt v1.71, adapted to new API style by taking over Calc v0.41
+    + added _is_two(), _is_ten(), and _ten()
+  * cleaned XS code, got rid of "unused var" warnings (thanx perl-xs people!)
+

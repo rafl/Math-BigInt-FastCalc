@@ -1,0 +1,45 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.41.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It would check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+
+SHA1 c9bbbb834c445ab84fa7eefcbe7df176d7b2a740 CHANGES
+SHA1 58d7a00ab2a9f5448a561d49b5a2077efa245ac7 CREDITS
+SHA1 2ebdc830d3ab736b281b442fde222a489061e04c FastCalc.xs
+SHA1 7f21ec920c8aa4fd4c1ac59c7127b37967b17a09 MANIFEST
+SHA1 2842da2976b0ee9051f3807a812d6b1fb5b38662 META.yml
+SHA1 7f53e184fde40644cafec56f6f89b2a63b4f175d Makefile.PL
+SHA1 5f73e0906d055d512180eb8b0b9c60f06edcb596 README
+SHA1 0219b495b96f8a946cd23c384b66c9231e29f0b6 TODO
+SHA1 31c098778db83443440c210bc2930a191545fab7 lib/Math/BigInt/FastCalc.pm
+SHA1 89f15bfcbcbdc0b481728774d430faf6a1984da8 t/bigfltpm.inc
+SHA1 ba089a2ce00f089afbb9769e801e8dfb9ded8180 t/bigfltpm.t
+SHA1 81f78404be3f660a61d68719de389d473888f640 t/bigintfc.t
+SHA1 f0ea2e8dcc8c8d724db2d8cf81a41a69b4675c3e t/bigintpm.inc
+SHA1 04db742ad369d3a372022b51cfebd06db05ab7cf t/bigintpm.t
+SHA1 f324311bde3f86401ea2708c42a6f13031a535a4 t/bootstrap.t
+SHA1 7f10510e0218cfae2fbb58dabeea0ba966ede013 t/mbi_rand.t
+SHA1 8b454e3015212b33974be31c54a0ca745c59b4ba t/mbimbf.inc
+SHA1 ccc08f6373dba8db715fc1f2c18f16daacc902b4 t/mbimbf.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+Comment: When cryptography is outlawed, bayl bhgynjf jvyy unir cevinpl.
+
+iQEVAwUBQR/GyHcLPEOTuEwVAQFlygf9HiYShhILV+c8joohYc4aoJveQ8WVz3pV
+NHCdOYD3+ZDjMMtRp5KhrrtafFeCBFwBKoOBaDa4L9rOX3aWIB4T4j74Ny+3vtI2
+26ihGJLKJyLlic4l9M5ccIKDLL40yk77EdZYw+xyh1QDfKiyo6fI7Spwhxpozxdb
+3agyq0p1Fw+7pz1qRLIRYt9jfZxG/tFXRD7HPKWZtzmNqnhAMketQOWqHlKjxVmu
++5E/ZxWcB+9URvBA2/gJMt43qF7DZmY4PQn5x0nfDlh+2dZzybpjSciaLWeMaPdM
+2fHYfiiruu74Qe/wpYRE4yFkiXkNvgsz6gnvBf92T4Yhz3DiBD2UGQ==
+=njBe
+-----END PGP SIGNATURE-----

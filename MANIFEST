@@ -2,6 +2,8 @@ CHANGES
 CREDITS
 MANIFEST
 README
+SIGNATURE
+TODO
 t/bootstrap.t
 t/bigfltpm.inc
 t/bigintpm.inc
@@ -14,3 +16,4 @@ t/mbimbf.t
 lib/Math/BigInt/FastCalc.pm
 FastCalc.xs
 Makefile.PL
+META.yml                                 Module meta-data (added by MakeMaker)
