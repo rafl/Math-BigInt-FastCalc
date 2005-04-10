@@ -68,3 +68,8 @@ Revision history for Perl extension Math::BigInt::FastCalc.
   * take over changes from Calc 0.45 (fix bug with div shortcut)
   * require Math::BigInt v1.75 and use its tests
 
+2005-03-30 0.10 Tels (5953 tests)
+  * load Calc.pm and use its code to provide the routines that FastCalc
+    does not yet have in XS (cut down Copy&Paste code considerably
+  * require Math::BigInt v1.76 to properly load Calc.pm
+

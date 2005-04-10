@@ -17,7 +17,7 @@ sub MY::metafile {
   $node->{license}		= 'perl';
   $node->{distribution_type}	= 'module';
   $node->{generated_by}		= "$self->{DISTNAME} version $self->{VERSION}";
-  $node->{installdirs}		= 'site';
+  $node->{installdirs}		= $self->{INSTALLDIRS},
   $node->{requires}		= $self->{PREREQ_PM};
 
   my $dump = YAML::Dump( $node );
@@ -28,16 +28,18 @@ sub MY::metafile {
   return "metafile:\n$dump";
 }
 
+my @extra;
+my $PERL_CORE = grep $_ eq "PERL_CORE=1", @ARGV;
+push @extra, 'MAN3PODS' => {} if $PERL_CORE;
+
+#push @extra, 'INSTALLDIRS'  => 'perl' if $] >= 5.00903;
+
 WriteMakefile(
     'NAME'		=> 'Math::BigInt::FastCalc',
     'VERSION_FROM'	=> 'lib/Math/BigInt/FastCalc.pm', # finds $VERSION
     'PREREQ_PM'		=> {
-	Math::BigInt => 1.75,
-      },
-    'LIBS'		=> [''], 	# e.g., '-lm'
-    'DEFINE'		=> '', 		# e.g., '-DHAVE_SOMETHING'
-	# Insert -I. if you add *.h files later:
-    'INC'		=> '', 		# e.g., '-I/usr/include/other'
-	# Un-comment this if you add C files to link with later:
-    # 'OBJECT'		=> '$(O_FILES)', # link all the C files too
-);
+	Math::BigInt => 1.76,
+    },
+    INSTALLDIRS		=> 'perl',
+    @extra,
+ );
