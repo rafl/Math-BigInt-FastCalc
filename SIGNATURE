@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.42.
+signed via the Module::Signature module, version 0.54.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -12,16 +12,17 @@ the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
 
 -----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-SHA1 4581c69d2508af7f45d165632389249eabf209fb CHANGES
+SHA1 d98b917de9d71c876783a6c94663cd3e226d4a40 CHANGES
 SHA1 58d7a00ab2a9f5448a561d49b5a2077efa245ac7 CREDITS
 SHA1 2ebdc830d3ab736b281b442fde222a489061e04c FastCalc.xs
-SHA1 7f21ec920c8aa4fd4c1ac59c7127b37967b17a09 MANIFEST
-SHA1 47a808338d88d863add470499c0eb74d6192c86b META.yml
-SHA1 fc7ff59be44824314bbcce07d14d3eb811854a66 Makefile.PL
-SHA1 092d51fc932958f0b9621f0f1ee92454acf9bbf0 README
+SHA1 86c362488d406219c59eaebbc1191cbf23ea921a MANIFEST
+SHA1 53df425d2c2d99bd5f85713e9eb31a3a01f105cd META.yml
+SHA1 dfa4252feadfcb7fbd814a7c4e405294d4ee57b3 Makefile.PL
+SHA1 a1e38089425d81c98d94604ac652fd3ef775cdee README
 SHA1 4a97b901ec3fd7edb989c8918ec0d82b8f7dfff7 TODO
-SHA1 687bc02efc8e041ffe07c3cc09d34e313fa9557a lib/Math/BigInt/FastCalc.pm
+SHA1 6c05b9369b16bd5a8336da1ce28d36db14792a1a lib/Math/BigInt/FastCalc.pm
 SHA1 57a416650fede5f54aa295e5cd133022a0b9efdd t/bigfltpm.inc
 SHA1 4076f36c4d0989c5f3bfd208dd6e0c553ae35a3e t/bigfltpm.t
 SHA1 81f78404be3f660a61d68719de389d473888f640 t/bigintfc.t
@@ -31,14 +32,16 @@ SHA1 f324311bde3f86401ea2708c42a6f13031a535a4 t/bootstrap.t
 SHA1 7f10510e0218cfae2fbb58dabeea0ba966ede013 t/mbi_rand.t
 SHA1 8b454e3015212b33974be31c54a0ca745c59b4ba t/mbimbf.inc
 SHA1 ccc08f6373dba8db715fc1f2c18f16daacc902b4 t/mbimbf.t
+SHA1 1f663f34511d969ea18a235e96cff867869b8d2d t/pod.t
+SHA1 85872557f2e8ca0006d77f377bea14ad62a0cf6a t/pod_cov.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
+Version: GnuPG v1.4.2 (GNU/Linux)
 
-iQEVAwUBQlj1TXcLPEOTuEwVAQGbwQf/QwLIGUOgouey859Z+TAn0YH7GGUowtYc
-FA+DY5p8Bn7/YAJm7BNcxVUHchuTMk8QmhB5DAzyuQl19gmF7IlTaEAgr1EeSVWh
-TZ4XeoFcwc6fdchl2Ey37hIMXdv0TdcPMcN5eE3qDPW52CoZcuNjJkooZTIRjVT8
-VB8EF0sIgYcOPDq2gg6CMjKXgpe3Xlm8Pg4ahAEUMdjuWsKpg55nUgkuxOqdd0Kl
-69mRyd/0wc/4nhaj9SXe7tTG10G8lUXgsXWyuYA/s8kPeQiFnAiXr+ptvYa0wxPW
-aqF2vexadaVQf6F0hXLVdPaRxdzqqwLiSc09NuxX8mL6L6htGfi94A==
-=50Bs
+iQEVAwUBRcNKMXcLPEOTuEwVAQLOwAf+Pz1ui8VH9uYY/2+0EtjpwQ44AZ1gtpSY
+QHJ1MiJT6ovFO85TOXoNx7nOrnw+iDgLsQF2Ki/I+t2YRMmcGfbWlbgM+Gv7D6zA
+Z5+CPZ8TQlPqS9DRyhonqZMeKH7Zx+mpHCtKjoRA6DkheZiq+mYdrsDy6qE8dQtG
+b0m5y9bRqdHBBf8Zpx+IRvVU6JNXwrcZ4KQziuhjaHlnC3iwrn+aE+iT0DrCluAt
+Jku5295FgZk9svdrSE0bn8eCcbUYLmpQukCMhXaNeymFn3bhTnFGDokOAPP18WVw
+lpqhxkzdI/JaEuNRzc3ggpm6fBToDheqjh7LRK4X4Zni51MKhU20eA==
+=SWMT
 -----END PGP SIGNATURE-----

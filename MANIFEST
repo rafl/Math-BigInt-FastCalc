@@ -13,6 +13,8 @@ t/bigintfc.t
 t/mbi_rand.t
 t/mbimbf.inc
 t/mbimbf.t
+t/pod.t
+t/pod_cov.t
 lib/Math/BigInt/FastCalc.pm
 FastCalc.xs
 Makefile.PL

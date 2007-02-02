@@ -1,5 +1,12 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2007-02-02 0.11 Tels (5953 tests)
+  * require Math::BigInt 1.79
+  * add support for _as_oct() and _from_oct()
+  * add _length() to the method list
+
+Older changelog:
+
 0.01  Wed Jun  5 13:03:55 2002
 	- original version; created by h2xs 1.21 with options
 		-n Math::BigInt::FastCalc -A

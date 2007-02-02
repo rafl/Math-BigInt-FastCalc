@@ -32,5 +32,12 @@ To install this module type the following:
    make test
    make install		# as root
 
-Copyright (C) 2002 - 2005 Tels - http://bloodgate.com/perl
+Under Windwos, get the nmake program and do:
+
+   perl Makefile.PL
+   nmake
+   nmake test
+   nmake install	# might need admin rights
+
+Copyright (C) 2002 - 2007 Tels - http://bloodgate.com/perl
 
