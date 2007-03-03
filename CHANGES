@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2007-03-03 0.12 Tels (6280 tests)
+  * fix bug #25033 It leaks (Thanx M. Schwern!)
+  * require Perl 5.6.2, anything older is unsupported and untested
+
 2007-02-02 0.11 Tels (5953 tests)
   * require Math::BigInt 1.79
   * add support for _as_oct() and _from_oct()

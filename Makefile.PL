@@ -44,6 +44,5 @@ WriteMakefile(
 	'Math::BigInt' => 1.79,
     },
     INSTALLDIRS		=> 'perl',
-    PREREQ_FATAL	=> 1,
     @extra,
  );

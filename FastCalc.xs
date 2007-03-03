@@ -230,51 +230,44 @@ _num(class,x)
 
 ##############################################################################
 
-void
+#define CONSTANT_OBJ(int)		\
+    RETVAL = newAV();			\
+    sv_2mortal((SV*)RETVAL);		\
+    av_push (RETVAL, newSViv( int ));
+
+AV *
 _zero(class)
-  INIT:
-    AV* a;
-
   CODE:
-    a = newAV();
-    av_push (a, newSViv( 0 ));		/* zero */
-    ST(0) = newRV_noinc((SV*) a);
+    CONSTANT_OBJ(0)
+  OUTPUT:
+    RETVAL
 
 ##############################################################################
 
-void
+AV *
 _one(class)
-  INIT:
-    AV* a;
-
   CODE:
-    a = newAV();
-    av_push (a, newSViv( 1 ));		/* one */
-    ST(0) = newRV_noinc((SV*) a);
+    CONSTANT_OBJ(1)
+  OUTPUT:
+    RETVAL
 
 ##############################################################################
 
-void
+AV *
 _two(class)
-  INIT:
-    AV* a;
-
   CODE:
-    a = newAV();
-    av_push (a, newSViv( 2 ));		/* two */
-    ST(0) = newRV_noinc((SV*) a);
+    CONSTANT_OBJ(2)
+  OUTPUT:
+    RETVAL
 
 ##############################################################################
 
-void
+AV *
 _ten(class)
-  INIT:
-    AV* a;
-
   CODE:
-    a = newAV();
-    av_push (a, newSViv( 10 ));		/* ten */
-    ST(0) = newRV_noinc((SV*) a);
+    CONSTANT_OBJ(10)
+  OUTPUT:
+    RETVAL
 
 ##############################################################################
 
