@@ -41,7 +41,7 @@ WriteMakefile(
     'NAME'		=> 'Math::BigInt::FastCalc',
     'VERSION_FROM'	=> 'lib/Math/BigInt/FastCalc.pm', # finds $VERSION
     'PREREQ_PM'		=> {
-	'Math::BigInt' => 1.79,
+	'Math::BigInt' => 1.82,
     },
     INSTALLDIRS		=> 'perl',
     @extra,

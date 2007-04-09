@@ -1,4 +1,5 @@
 
+* fix t/leak.t
 * put _str() and _new() into XS
 * put _add()/_sub() into XS
 * put all the other routines into XS

@@ -2,11 +2,11 @@
 name: Math-BigInt-FastCalc
 author: Tels
 abstract: Math::BigInt::Calc with some XS for more speed
-version: 0.12
+version: 0.13
 version_from: lib/Math/BigInt/FastCalc.pm
 license: perl
 distribution_type: module
-generated_by: Math-BigInt-FastCalc version 0.12
+generated_by: Math-BigInt-FastCalc version 0.13
 installdirs: perl
 requires:
-  Math::BigInt: 1.79
+  Math::BigInt: 1.82

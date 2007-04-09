@@ -1,5 +1,11 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2007-04-09 0.13 Tels (6280 tests)
+  * require Math::BigInt 1.82
+  * revert the accidentily change to "NV elems" in _len
+    (basically, apply the fix that was already in blead to the CPAN release)
+  * plug all the leaks in _acmp(), _is_ten() etc. (Thanx Hugo!)
+
 2007-03-03 0.12 Tels (6280 tests)
   * fix bug #25033 It leaks (Thanx M. Schwern!)
   * require Perl 5.6.2, anything older is unsupported and untested
