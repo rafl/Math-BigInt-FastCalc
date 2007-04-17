@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2007-04-17 0.14 Tels (6438 tests)
+  * require Math::BigInt 1.83
+  * support api_version() 2 by adding _1ex() and _alen()
+  * add a few tests
+
 2007-04-09 0.13 Tels (6280 tests)
   * require Math::BigInt 1.82
   * revert the accidentily change to "NV elems" in _len
