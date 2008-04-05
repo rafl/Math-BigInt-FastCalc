@@ -16,6 +16,6 @@ no_index:
     - inc
     - t
 requires: 
-  Math::BigInt: 1.87
-  perl: 5.6.2
-version: 0.15
+  Math::BigInt: 1.88
+  perl: 5.6.0
+version: 0.16

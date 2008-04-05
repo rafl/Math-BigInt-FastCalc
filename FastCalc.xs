@@ -7,6 +7,8 @@ double XS_BASE_LEN = 0;
 
 MODULE = Math::BigInt::FastCalc		PACKAGE = Math::BigInt::FastCalc
 
+PROTOTYPES: DISABLE
+
  #############################################################################
  # 2002-08-12 0.03 Tels unreleased
  #  * is_zero/is_one/is_odd/is_even/len work now (pass v1.61 tests)
@@ -59,7 +61,7 @@ _new(class, x)
     /* create the array */
     RETVAL = newAV();
     sv_2mortal((SV*)RETVAL);
-    if (SvIOK(x) && SvIV(x) < XS_BASE)
+    if (SvIOK(x) && SvUV(x) < XS_BASE)
       {
       /* shortcut for integer arguments */
       av_push (RETVAL, newSVuv( SvUV(x) ));

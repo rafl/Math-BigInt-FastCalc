@@ -1,6 +1,12 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
-2007-06-30 0.15 Tels (6439 tests)
+2007-09-16 0.16 Tels (6892 tests)
+  * require Math::BigInt 1.88
+  * disable prototypes
+  * fix SvIV() vs. SvUV() in _new() (fix bug #29720)
+  * it works back to v5.006 (thanx zefram!)
+
+2007-06-30 0.15 Tels (6892 tests)
   * require Math::BigInt 1.87
   * add _nok()
   * bundle and use Module::Install

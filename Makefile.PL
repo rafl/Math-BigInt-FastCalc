@@ -1,4 +1,5 @@
 
+use 5.006;
 use strict;
 
 # Load the Module::Install bundled in ./inc/
@@ -10,8 +11,8 @@ name		'Math-BigInt-FastCalc';
 # Get most of the details from the primary module
 all_from	'lib/Math/BigInt/FastCalc.pm';
 
-requires	'perl'		=> "5.006002";
-requires	'Math::BigInt'	=> 1.87;
+requires	'perl'		=> "5.006";
+requires	'Math::BigInt'	=> 1.88;
 
 build_requires	'Test::More'	=> 0.62;
 

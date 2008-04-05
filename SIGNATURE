@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.54.
+signed via the Module::Signature module, version 0.55.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,30 +14,30 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 d79ec1204de1659c6ccec876f3b676ba981f6dab CHANGES
+SHA1 6851a4f91df70e4cec07c6060b1620a13337066c CHANGES
 SHA1 58d7a00ab2a9f5448a561d49b5a2077efa245ac7 CREDITS
-SHA1 bc1da06098fcfc4fcb0b3c92ac4e6fc6f4a2ec40 FastCalc.xs
+SHA1 98ba0087117ff7e02c207d8312d79fe5f780fafe FastCalc.xs
 SHA1 3c9ea0ae8e3b33c999932444511522b6662bb8f0 MANIFEST
-SHA1 05256ff969de455ddd572ce98143b95522906212 MANIFEST.SKIP
-SHA1 e0c4d8a01da1ad2b0449e6545e522d552422f7a4 META.yml
-SHA1 39167289d073ff95fdc38981cf05df0d16cb48db Makefile.PL
+SHA1 510b06be3cf9b6aa1e0a0bf66678bcb4c527c748 MANIFEST.SKIP
+SHA1 34d4f327747bb71b862533b4151afad4113b19eb META.yml
+SHA1 43f02e3e15c15b1b67ed42a1e4e360710cc40963 Makefile.PL
 SHA1 a1e38089425d81c98d94604ac652fd3ef775cdee README
 SHA1 7b92a7ccd02f44187adc7b38c5e399ec1c7b997d TODO
-SHA1 ceac99579ef3914de1936417282842c07d907a6a inc/Module/Install.pm
-SHA1 6c9471c92c28e247fb84f4ab7dc277f68b33ea95 inc/Module/Install/Base.pm
-SHA1 b2cb1026330e8c4f8533c79569498ab15f189d86 inc/Module/Install/Can.pm
-SHA1 78acbad45c4289c228ead2278fc213ddd66bcead inc/Module/Install/Fetch.pm
-SHA1 642e5b27f4cbbbe440e5dc05c639f5fb79875fe3 inc/Module/Install/Makefile.pm
-SHA1 80d024f3eccf1c825b02b5e59de236b0af7d4bfc inc/Module/Install/Metadata.pm
-SHA1 fe6780ea5cfd67c79140699fbd4f0fe262255d57 inc/Module/Install/Win32.pm
-SHA1 51d43bffcfd7ffdecb8c8e9f97f3896c31b2e1b2 inc/Module/Install/WriteAll.pm
-SHA1 d79bc73269ba016c47e5edcc01ca305d77e121c2 lib/Math/BigInt/FastCalc.pm
+SHA1 d8f6d2df4e75cb9e6e77a8377457f0ececd00e31 inc/Module/Install.pm
+SHA1 03590cde5c3de0d0d8a84d2b96917ed1a2cf9a30 inc/Module/Install/Base.pm
+SHA1 8ef3c70e905be7d1007b446f21d4eb3ff6ae24cb inc/Module/Install/Can.pm
+SHA1 79054604a1cd4e99443b05cbb62832568a204a33 inc/Module/Install/Fetch.pm
+SHA1 dfa433f2f41d990946f1b3d68a29299539f2dea6 inc/Module/Install/Makefile.pm
+SHA1 72cab336b6be5716aae0a1cb6d9add6c98a7a1f5 inc/Module/Install/Metadata.pm
+SHA1 35a62725a7eade0fa617ef2ba4cf2f4d4a69a3fe inc/Module/Install/Win32.pm
+SHA1 19dcc6d1e9f02c56d3f6d184642f4cd68aa371e6 inc/Module/Install/WriteAll.pm
+SHA1 0741cc486c31377a58b1171a10bb3e83138ce9d4 lib/Math/BigInt/FastCalc.pm
 SHA1 63986f13125621ec2bdc4330fa0dcb35706b8240 t/bigfltpm.inc
 SHA1 806203223c1908cf0f60b4ca4817387ad03459b8 t/bigfltpm.t
 SHA1 be9be68232b375e96d2538416cbd26653e5469b1 t/bigintfc.t
-SHA1 e1aa0b0e8448be54a780613b7febee9f7b389bd1 t/bigintpm.inc
+SHA1 c4ec419cc568bfd9f17a7dc9bb82000d22e3d2fd t/bigintpm.inc
 SHA1 be2414585738685ea2a539ca05a1ee6b1bd05289 t/bigintpm.t
-SHA1 f324311bde3f86401ea2708c42a6f13031a535a4 t/bootstrap.t
+SHA1 119dd5a291472faf89348be48721829a3a63dc61 t/bootstrap.t
 SHA1 5125ef80a4df97fcc9770eca4ee752d5a29d4e09 t/leak.t
 SHA1 7f10510e0218cfae2fbb58dabeea0ba966ede013 t/mbi_rand.t
 SHA1 88c91630f9b299f01f18d0d4006c30cc14719a6e t/mbimbf.inc
@@ -45,13 +45,13 @@ SHA1 ccc08f6373dba8db715fc1f2c18f16daacc902b4 t/mbimbf.t
 SHA1 1f663f34511d969ea18a235e96cff867869b8d2d t/pod.t
 SHA1 85872557f2e8ca0006d77f377bea14ad62a0cf6a t/pod_cov.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
+Version: GnuPG v1.4.6 (GNU/Linux)
 
-iQEVAwUBRoZkUHcLPEOTuEwVAQLBLAf7BwTOSSW7f1x5E+fTltoEWOBxQvAw/GWZ
-gMmE4jDNsekKmP9VA14kfS9FZlkPK+weu+PAsjSW4dvxdCcbLaxS4xeYHQXOHj3D
-nId7II3GmQuIQuygEB2k0n6NvTFtm4z1Nn+Z0oldgZ2xJbhrhXkOvtwzJcxf9TLL
-Lkg09Bt5B5vYahgzC9rAHnjoEYUbrxngZCnbpEVpaLioUEE8FDAE20Mks3rke4Xl
-Etz/KQTMG5jYCaZWEM2mzsu+gLrhyVXK2k3EKgU1zccGuI4mh5LUDxOqaJDtxgK2
-LTadlJA+zerxwIpr7o8HMNXUl0hY4vwIFl/+GpmeRsTFtgH7Ph577A==
-=zMoi
+iQEVAwUBR/eeM3cLPEOTuEwVAQKX0Qf/UEvO7Tavxcw55liCAiFgpMwA17a8Yd20
++J3+4WmirQnp86kXGd2BOhiC+MTgG0gbIDO7d+yhz0h3dvVN38HokgDPaLioYJkM
+JkVRziq6ENXk9/OH3JNbgXxsMX96/mNV4g0gX7W0sZ+kIrgkCq8/4FgRHf9eNr5s
+BvS10076Acy3t2Qm5lXwwcYmD190M9FnS3O1epjUFWArGnA3XrT0OkOB3n1IjuED
+rR7gXYNCSWYdQkOmvX7EXOQsDMUiaTY6BCMdNdxgI5DwQsUCLIDgIppUkBtFwj3E
+JLIgIHjID4ywtsZ/AC/9bnv95H+83MquMCJB9j34JL1dtJ2H9e6cCw==
+=6CBR
 -----END PGP SIGNATURE-----

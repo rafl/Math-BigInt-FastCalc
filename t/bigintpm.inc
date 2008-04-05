@@ -551,7 +551,7 @@ $x = $class->new(-($BASE-1));  ok ($x->numify(),-($BASE-1));
 # +0 is to protect from 1e15 vs 100000000 (stupid to_string aaaarglburblll...)
 $x = $class->new($BASE);       ok ($x->numify()+0,$BASE+0); 	
 $x = $class->new(-$BASE);      ok ($x->numify(),-$BASE);
-$x = $class->new( -($BASE*$BASE*1+$BASE*1+1) ); 
+$x = $class->new( sprintf("%0.20f", -($BASE*$BASE*1+$BASE*1+1)) ); 
 ok( sprintf("%0.20f", $x->numify()), sprintf("%0.20f",-($BASE*$BASE*1+$BASE*1+1))); 
 
 ###############################################################################
