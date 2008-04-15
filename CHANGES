@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2008-04-15 0.19 Tels (6892 tests)
+  * forcefully regenerate META.yml (sigh@Module::Install)
+
 2008-04-15 0.18 Tels (6892 tests)
   * fix compilation under v5.6.2 (sigh)
 
