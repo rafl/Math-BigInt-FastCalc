@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2008-04-15 0.18 Tels (6892 tests)
+  * fix compilation under v5.6.2 (sigh)
+
 2008-04-13 0.17 Tels (6892 tests)
   * forgot SvIOK() to SvUOK() (bug #29720, Thanx Alexey Tourbin!)
 

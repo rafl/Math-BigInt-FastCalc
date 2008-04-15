@@ -2,6 +2,11 @@
 #include "perl.h"
 #include "XSUB.h"
 
+/* for Perl prior to v5.7.1 */
+#ifndef SvUOK
+#  define SvUOK(sv) SvIOK_UV(sv)
+#endif
+
 double XS_BASE = 0;
 double XS_BASE_LEN = 0;
 
