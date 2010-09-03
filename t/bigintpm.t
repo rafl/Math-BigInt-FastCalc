@@ -11,7 +11,7 @@ BEGIN
   my $location = $0; $location =~ s/bigintpm.t//;
   unshift @INC, $location; # to locate the testing files
   chdir 't' if -d 't';
-  plan tests => 3257;
+  plan tests => 3279;
   }
 
 use Math::BigInt lib => 'FastCalc';

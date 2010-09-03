@@ -42,7 +42,7 @@ my ($f,$z,$a,$exp,@a,$m,$e,$round_mode,$expected_class);
 
 while (<DATA>) 
   {
-  chomp;
+  $_ =~ s/[\n\r]//g;	# remove newlines
   next if /^#/;	# skip comments
   if (s/^&//) 
     {
@@ -551,8 +551,8 @@ $x = $class->new(-($BASE-1));  ok ($x->numify(),-($BASE-1));
 # +0 is to protect from 1e15 vs 100000000 (stupid to_string aaaarglburblll...)
 $x = $class->new($BASE);       ok ($x->numify()+0,$BASE+0); 	
 $x = $class->new(-$BASE);      ok ($x->numify(),-$BASE);
-$x = $class->new( sprintf("%0.20f", -($BASE*$BASE*1+$BASE*1+1)) ); 
-ok( sprintf("%0.20f", $x->numify()), sprintf("%0.20f",-($BASE*$BASE*1+$BASE*1+1))); 
+$x = $class->new( sprintf("%0.20f", -($BASE*$BASE*1+$BASE*1+1)) );
+ok( sprintf("%0.20f", $x->numify()), sprintf("%0.20f",-($BASE*$BASE*1+$BASE*1+1)));
 
 ###############################################################################
 # test bug in _digits with length($c[-1]) where $c[-1] was "00001" instead of 1
@@ -642,7 +642,7 @@ ok ($class->new(1)->is_one(),1);
 ok ($class->new(-1)->is_one(),0);
 
 ###############################################################################
-# [perl #30609] bug with $x -= $x not beeing 0, but 2*$x
+# [perl #30609] bug with $x -= $x not being 0, but 2*$x
 
 $x = $class->new(3);  $x -= $x; ok ($x, 0);
 $x = $class->new(-3); $x -= $x; ok ($x, 0);
@@ -987,11 +987,11 @@ E1:NaN
 E23:NaN
 1.23E1:NaN
 1.23E-1:NaN
-# bug with two E's in number beeing valid
+# bug with two E's in number being valid
 1e2e3:NaN
 1e2r:NaN
 1e2.0:NaN
-# bug with two '.' in number beeing valid
+# bug with two '.' in number being valid
 1.2.2:NaN
 1.2.3e1:NaN
 -1.2.3:NaN
@@ -2304,6 +2304,15 @@ NaN:NaN:10:NaN
 1:NaN:10:NaN
 inf:1:14:1
 -inf:1:14:-1
+0:-inf:14:3
+-1:-inf:14:-3
+1:-inf:14:3
+0:inf:14:0
+inf:-inf:14:2
+-inf:-inf:14:-2
+# +- 0.78....
+inf:+inf:14:0
+-inf:+inf:14:0
 1:5:13:0
 1:5:14:0
 0:0:10:0
@@ -2337,9 +2346,12 @@ NaN:1:NaN
 1:-2:0
 # 7 over 3 = 35
 7:3:35
-7:6:1
+7:6:7
 100:90:17310309456440
 100:95:75287520
+2:0:1
+7:0:1
+2:1:2
 &bround
 $round_mode('trunc')
 0:12:0
