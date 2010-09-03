@@ -12,3 +12,4 @@ MANIFEST*
 Debian*
 Math-BigInt-FastCalc-*
 *.bs
+*.[oc]
