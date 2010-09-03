@@ -11,7 +11,6 @@ use strict;
 BEGIN
   {
   $| = 1;
-  chdir 't' if -d 't';
   unshift @INC, ('../lib', '../blib/arch');	# for running manually
   plan tests => 22;
   }
