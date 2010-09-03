@@ -7,3 +7,4 @@
 ^Math-BigInt-FastCalc-
 .*\.patch\z
 pm_to_blib
+\.git.*
