@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2010-09-03 0.21 rafl (6892 tests)
+  * Remove some unneeded test code which only broke things when being ran in the
+    perl core.
+
 2010-09-03 0.20 rafl (6892 tests)
   * Avoid certain kinds of segfaults as well as wrong bnok() behaviour by
     depending on Math::BigInt 0.90.
