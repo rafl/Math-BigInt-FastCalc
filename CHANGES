@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2010-09-14 0.22 rafl (6938 tests)
+  * Modernize the test suite to use Test::More instead of Test.
+
 2010-09-03 0.21 rafl (6892 tests)
   * Remove some unneeded test code which only broke things when being ran in the
     perl core.
