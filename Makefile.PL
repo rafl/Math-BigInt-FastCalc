@@ -11,9 +11,10 @@ name		'Math-BigInt-FastCalc';
 # Get most of the details from the primary module
 all_from	'lib/Math/BigInt/FastCalc.pm';
 
-requires	'perl'		=> "5.006";
-requires	'Math::BigInt'	=> '1.90';
-requires	'XSLoader'	=> '0';
+requires	'perl'			=> '5.006';
+requires	'Math::BigInt'		=> '1.90';
+requires	'Math::BigInt::Calc'	=> '0.56';
+requires	'XSLoader'		=> '0';
 
 build_requires	'Test::More'	=> 0.62;
 
