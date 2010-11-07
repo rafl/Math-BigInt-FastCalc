@@ -1,5 +1,19 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2010-11-07 0.24 rafl (6938 tests)
+  * Reduce repetition (and object size) in FastCalc.xs by using ALIASes
+    (Nicholas Clark).
+  * inline the macros CONSTANT_OBJ and RETURN_MORTAL_BOOL. (Nicholas Clark).
+  * Avoid creating two entries instead of one on the mortals stack in _new() and
+    _zero() (Nicholas Clark).
+  * Convert from DynaLoader to XSLoader (Nicholas Clark).
+  * Adapt to the changed order of the return value Math::BigInt::Calc::_base_len
+    in Math::BigInt 1.97 (Nicholas Clark).
+  * Initialise BASE and BASE_LEN as part of bootstrap, avoiding special one-shot
+    setter routines (Nicholas Clark).
+  * Remove the $BASE or $BASE_LEN globals. They were never documented or
+    exported, and are now unnecessary (Nicholas Clark).
+
 2010-09-14 0.22 rafl (6938 tests)
   * Modernize the test suite to use Test::More instead of Test.
 
