@@ -1,7 +1,5 @@
 
 * fix t/leak.t
-* _numify() creates an NV, this is not good when we use 64bit integers
-  and do not have long doubles.
 * put _str() into XS
 * put _add()/_sub() into XS
 * put all the other routines into XS

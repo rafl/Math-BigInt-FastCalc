@@ -1,5 +1,16 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2011-02-05 0.25 pjacklam (7558 tests)
+  * Remove _new() from XS code and use _new() in Math::BigInt::Calc
+    instead. The XS _new() doesn't handle integers that are too large to
+    be represented exactly as floating point numbers, but small enough
+    to be represented as 64 bit integers. The XS _new() also returns
+    nan, not inf, when it overflows. This closes RT #63335 and RT #49569
+    (Peter John Acklam).
+  * Copied test files from latest Math::BigInt (v1.991): bigfltpm.inc,
+    bigfltpm.t, bigintpm.inc, bigintpm.t, mbi_rand.t, mbimbf.inc,
+    mbimbf.t (Peter John Acklam).
+
 2010-11-07 0.24 rafl (6938 tests)
   * Reduce repetition (and object size) in FastCalc.xs by using ALIASes
     (Nicholas Clark).
@@ -69,8 +80,8 @@ Revision history for Perl extension Math::BigInt::FastCalc.
 Older changelog:
 
 0.01  Wed Jun  5 13:03:55 2002
-	- original version; created by h2xs 1.21 with options
-		-n Math::BigInt::FastCalc -A
+        - original version; created by h2xs 1.21 with options
+                -n Math::BigInt::FastCalc -A
 2002-08-09 0.02 Tels
   - first working version of XS code of _is_even(), _is_odd()
 
@@ -140,4 +151,3 @@ Older changelog:
   * load Calc.pm and use its code to provide the routines that FastCalc
     does not yet have in XS (cut down Copy&Paste code considerably
   * require Math::BigInt v1.76 to properly load Calc.pm
-
