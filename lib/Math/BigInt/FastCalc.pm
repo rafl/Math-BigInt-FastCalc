@@ -8,7 +8,7 @@ use Math::BigInt::Calc 0.56;
 
 use vars '$VERSION';
 
-$VERSION = '0.25';
+$VERSION = '0.251';
 
 ##############################################################################
 # global constants, flags and accessory

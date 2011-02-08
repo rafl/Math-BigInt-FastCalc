@@ -12,7 +12,7 @@ name		'Math-BigInt-FastCalc';
 all_from	'lib/Math/BigInt/FastCalc.pm';
 
 requires	'perl'			=> '5.006';
-requires	'Math::BigInt'		=> '1.90';
+requires	'Math::BigInt'		=> '1.991';
 requires	'Math::BigInt::Calc'	=> '0.56';
 requires	'XSLoader'		=> '0';
 

@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2011-02-06 0.251 pjacklam (7558 tests)
+  * Add requirement Math::BigInt version 1.991 (Peter John Acklam).
+
 2011-02-05 0.25 pjacklam (7558 tests)
   * Remove _new() from XS code and use _new() in Math::BigInt::Calc
     instead. The XS _new() doesn't handle integers that are too large to
