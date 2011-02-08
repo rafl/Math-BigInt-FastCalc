@@ -7,6 +7,11 @@
 #  define SvUOK(sv) SvIOK_UV(sv)
 #endif
 
+/* for Perl v5.6 (RT #63859) */
+#ifndef croak_xs_usage
+# define croak_xs_usage croak
+#endif
+
 double XS_BASE = 0;
 double XS_BASE_LEN = 0;
 

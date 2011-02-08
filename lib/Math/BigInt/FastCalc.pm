@@ -8,13 +8,13 @@ use Math::BigInt::Calc 0.56;
 
 use vars '$VERSION';
 
-$VERSION = '0.251';
+$VERSION = '0.26';
 
 ##############################################################################
 # global constants, flags and accessory
 
-# announce that we are compatible with MBI v1.70 and up
-sub api_version () { 1; }
+# announce that we are compatible with MBI v1.83 and up
+sub api_version () { 2; }
 
 # use Calc to override the methods that we do not provide in XS
 
