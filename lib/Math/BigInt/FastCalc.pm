@@ -8,7 +8,7 @@ use Math::BigInt::Calc 1.993;
 
 use vars '$VERSION';
 
-$VERSION = '0.27';
+$VERSION = '0.28';
 
 ##############################################################################
 # global constants, flags and accessory
@@ -43,9 +43,7 @@ XSLoader::load(__PACKAGE__, $VERSION, Math::BigInt::Calc::_base_len());
 ##############################################################################
 
 1;
-
 __END__
-
 =pod
 
 =head1 NAME
@@ -97,30 +95,14 @@ the same terms as Perl itself.
 
 =head1 AUTHORS
 
-=over 4
-
-=item *
-
 Original math code by Mark Biggar, rewritten by Tels L<http://bloodgate.com/>
 in late 2000.
-
-=item *
-
 Seperated from BigInt and shaped API with the help of John Peacock.
 
-=item *
-
 Fixed, sped-up and enhanced by Tels http://bloodgate.com 2001-2003.
-
-=item *
-
 Further streamlining (api_version 1 etc.) by Tels 2004-2007.
 
-=item *
-
-Bug-fixing by Peter John Acklam E<lt>pjacklam@online.noE<gt> 2010.
-
-=back
+Bug-fixing by Peter John Acklam E<lt>pjacklam@online.noE<gt> 2010-2011.
 
 =head1 SEE ALSO
 
