@@ -1,5 +1,12 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2011-02-26 0.27 pjacklam (7560 tests)
+  * Add Math::BigInt::Calc version information to diagnostics output of
+    01load.t. This is useful for debugging, since Math::BigInt::FastCalc
+    relies heavily on Math::BigInt::Calc (Peter John Acklam).
+  * Change bigintpm.inc to reflect recent changes in the Math::BigInt
+    distribution (Peter John Acklam).
+
 2011-02-08 0.26 pjacklam (7560 tests)
   * Add Perl v5.6 compatibility code to FastCalc.xs (RT #63859)
     (Peter John Acklam).

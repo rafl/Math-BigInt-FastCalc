@@ -12,3 +12,4 @@ BEGIN {
 diag("Testing Math::BigInt::FastCalc $Math::BigInt::FastCalc::VERSION");
 diag("==> Perl $], $^X");
 diag("==> Math::BigInt $Math::BigInt::VERSION");
+diag("==> Math::BigInt::Calc $Math::BigInt::Calc::VERSION");
