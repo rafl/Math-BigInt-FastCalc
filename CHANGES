@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::BigInt::FastCalc.
 
+2011-07-09 0.29 rafl (7560 tests)
+  * Synchronise with blead perl.
+    + Reduce object code size significantly through PERL_NO_GET_CONTEXT.
+
 2011-02-26 0.28 pjacklam (7560 tests)
   * Sync codebases (CPAN vs. blead): include t/mbi_rand.t from blead,
     fix typos in FastCalc.xs and t/bigintfc.t (Peter John Acklam).
